@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: stakedx
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 --keep-alive 5
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASS
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: WALLET_TRC20
+        sync: false
+      - key: WALLET_BEP20
+        sync: false

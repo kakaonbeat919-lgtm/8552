@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover"/>
+<title>StakeDX — Premium USDT Yield Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d14;--bg1:#111120;--bg2:#16162a;
+  --pur:#7c3aed;--pur2:#9333ea;--pur3:#a855f7;--pur-dim:rgba(124,58,237,0.15);--pur-glow:0 0 30px rgba(124,58,237,0.35);
+  --lime:#00e5a0;--lime-dim:rgba(0,229,160,0.12);
+  --gold:#f59e0b;--rose:#ef4444;--sky:#06b6d4;
+  --tx:#f0f0ff;--tx2:rgba(240,240,255,0.55);--tx3:rgba(240,240,255,0.28);
+  --rim:rgba(255,255,255,0.07);--rim2:rgba(255,255,255,0.12);
+  --H:'Syne',sans-serif;--M:'DM Mono',monospace;--B:'DM Sans',sans-serif;
+  --nav-h:64px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--B);overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeSpeed;-webkit-text-size-adjust:100%}
+::-webkit-scrollbar{width:0}
+::selection{background:rgba(124,58,237,0.3)}
+.bg-grad{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 20% 10%,rgba(124,58,237,0.12),transparent 55%),
+             radial-gradient(ellipse 50% 60% at 80% 85%,rgba(0,229,160,0.07),transparent 50%),var(--bg)}
+
+/* TOAST */
+.toast-c{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 20px);left:50%;transform:translateX(-50%);z-index:1500;pointer-events:none;width:90%;max-width:360px}
+.toast{background:#1a1a2e;border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:12px 16px;font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,0.5);opacity:0;transform:translateY(10px) translateZ(0);transition:opacity .28s cubic-bezier(.34,1.56,.64,1),transform .28s cubic-bezier(.34,1.56,.64,1);font-family:var(--B);will-change:opacity,transform}
+.toast.on{opacity:1;transform:translateY(0)}
+
+/* LOADER */
+.loader{position:fixed;inset:0;z-index:2000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.loader-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--pur),var(--pur2));display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:28px;font-weight:800;color:#fff;box-shadow:var(--pur-glow);animation:pulse 1.5s ease-in-out infinite;will-change:transform;transform:translateZ(0)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.loader-txt{font-family:var(--H);font-size:16px;font-weight:700}
+.loader-sub{font-size:12px;color:var(--tx2)}
+
+/* PBAR */
+.pbar{display:flex;gap:7px;overflow-x:auto;padding:9px 18px;background:rgba(13,13,20,0.9);border-bottom:1px solid var(--rim);scrollbar-width:none;position:relative;z-index:1}
+.pbar::-webkit-scrollbar{display:none}
+.pchip{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--rim)}
+.pc-s{font-family:var(--M);font-size:9px;color:var(--tx3)}.pc-p{font-family:var(--M);font-size:11px;font-weight:500}
+.pc-u{font-size:9.5px;font-weight:600;color:#4ade80}.pc-d{font-size:9.5px;font-weight:600;color:#f87171}
+
+/* LANDING */
+.landing{position:relative;z-index:1}
+.hero{text-align:center;padding:80px 22px 60px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);border-radius:99px;padding:6px 16px;font-size:11.5px;font-weight:600;color:var(--pur3);margin-bottom:24px;font-family:var(--M)}
+.hero-badge::before{content:'●';font-size:7px;animation:blink 2s infinite;color:var(--lime)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.h1{font-family:var(--H);font-size:clamp(36px,8vw,72px);font-weight:800;line-height:1.05;margin-bottom:16px;letter-spacing:-2px}
+.h1 .g{background:linear-gradient(135deg,var(--pur3),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+.h-sub{font-size:15px;color:var(--tx2);max-width:460px;margin:0 auto 30px;line-height:1.7;font-weight:300}
+.h-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.h-stats{display:flex;gap:44px;justify-content:center;margin-top:50px;flex-wrap:wrap}
+.hs-v{font-family:var(--H);font-size:25px;font-weight:800;color:var(--pur3);letter-spacing:-1px}
+.hs-l{font-size:10px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.l-sec{padding:56px 20px;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.l-title{font-family:var(--H);font-size:28px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:-1px}
+.l-sub{font-size:13px;color:var(--tx2);text-align:center;margin-bottom:30px;line-height:1.6}
+.grad{background:linear-gradient(135deg,var(--pur3),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.trust{display:flex;align-items:center;justify-content:center;gap:28px;padding:18px;background:rgba(255,255,255,0.02);border-top:1px solid var(--rim);border-bottom:1px solid var(--rim);flex-wrap:wrap;position:relative;z-index:1}
+.tr-it{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--tx2)}
+
+/* PLAN CARDS LANDING */
+.lp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.lp-card{border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1);will-change:transform}
+.lp-card:hover{transform:translateY(-5px)}
+.lp-banner{height:130px;display:flex;align-items:center;padding:16px 20px;position:relative;overflow:hidden}
+.lp-shield{font-size:54px;filter:drop-shadow(0 0 16px rgba(255,255,255,0.28));transition:transform .3s}
+.lp-card:hover .lp-shield{transform:scale(1.08) rotate(-5deg)}
+.lp-info{margin-left:auto;text-align:right}
+.lp-name{font-family:var(--H);font-size:18px;font-weight:800;color:#fff;margin-bottom:2px}
+.lp-brand{font-size:11px;color:rgba(255,255,255,0.6)}
+.lp-tag{position:absolute;bottom:10px;left:12px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:var(--M)}
+.lp-body{background:rgba(255,255,255,0.04);border:1px solid var(--rim);border-top:none;border-radius:0 0 20px 20px;padding:16px}
+.lp-nr{display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid var(--rim);margin-bottom:11px}
+.lp-ic{width:32px;height:32px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.lp-nm{font-size:14px;font-weight:700;font-family:var(--H)}
+.lp-ds{font-size:10.5px;color:var(--tx2)}
+.lp-rb{font-family:var(--H);font-size:20px;font-weight:800}
+.lp-dl{font-size:10px;color:var(--tx3);font-family:var(--M)}
+.lp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+.lp-cell{background:rgba(255,255,255,0.04);border-radius:10px;padding:10px}
+.lp-cl{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.lp-cv{font-size:13px;font-weight:700;font-family:var(--H)}
+.lp-pr{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:13px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s ease,background .18s ease;font-family:var(--B);white-space:nowrap;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.b-pur{background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff;box-shadow:0 4px 18px rgba(124,58,237,0.35)}.b-pur:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(124,58,237,0.5)}
+.b-out{background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--pur3)}.b-out:hover{background:var(--pur-dim)}
+.b-ghost{background:rgba(255,255,255,0.06);border:1px solid var(--rim);color:var(--tx2)}.b-ghost:hover{background:var(--rim2);color:var(--tx)}
+.b-danger{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:var(--rose)}.b-danger:hover{background:rgba(239,68,68,0.2)}
+.b-sm{padding:7px 16px;font-size:11.5px}
+.b-lg{padding:13px 28px;font-size:14px}
+.b-fw{width:100%;border-radius:14px}
+
+/* FORMS */
+.fg{margin-bottom:14px}.fl{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);margin-bottom:6px;font-family:var(--M)}
+.fi{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--rim2);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--tx);font-family:var(--B);outline:none;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease}
+.fi:focus{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.06);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+.fi::placeholder{color:var(--tx3)}.fi-m{font-family:var(--M);font-size:12px}
+select.fi{cursor:pointer}
+
+/* MODALS */
+.mw{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:none;align-items:flex-end;justify-content:center}
+.mw.on{display:flex;animation:mf .18s ease forwards}
+@keyframes mf{from{opacity:0}to{opacity:1}}
+.mbox{background:#131320;border:1px solid rgba(124,58,237,0.25);border-radius:24px 24px 0 0;padding:28px 22px 40px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;box-shadow:0 -20px 60px rgba(0,0,0,0.6);animation:msl .3s cubic-bezier(.34,1.56,.64,1) forwards;will-change:transform;overscroll-behavior:contain;scrollbar-width:none}
+.mbox::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.15)}
+@keyframes msl{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.m-title{font-family:var(--H);font-size:20px;font-weight:800;margin-bottom:4px;margin-top:8px}
+.m-sub{font-size:12px;color:var(--tx2);margin-bottom:20px;line-height:1.5}
+.m-close{float:right;cursor:pointer;color:var(--tx3);font-size:18px;margin-top:8px}.m-close:hover{color:var(--tx)}
+.dv{height:1px;background:var(--rim);margin:14px 0}
+.net-sel{display:flex;gap:8px;margin-bottom:14px}
+.n-opt{flex:1;padding:11px;border-radius:12px;cursor:pointer;text-align:center;font-weight:600;font-size:12px;transition:border-color .2s ease,background .2s ease,color .2s ease;border:1px solid var(--rim);color:var(--tx2)}
+.n-opt.on{border-color:rgba(124,58,237,.45);background:rgba(124,58,237,.12);color:var(--pur3)}
+.qbox{background:#fff;border-radius:12px;padding:10px;width:120px;height:120px;margin:0 auto 13px;display:grid;grid-template-columns:repeat(10,1fr);gap:1px}
+.qc{border-radius:1px}
+.wbox{background:rgba(0,0,0,0.4);border:1px solid rgba(124,58,237,0.15);border-radius:11px;padding:12px 44px 12px 12px;font-family:var(--M);font-size:10px;color:var(--pur3);word-break:break-all;position:relative;margin-bottom:10px;line-height:1.5}
+.cbtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);border-radius:7px;padding:4px 9px;font-size:9px;color:var(--pur3);cursor:pointer;font-family:var(--M)}
+.cbtn:hover{background:rgba(124,58,237,0.25)}
+.tabs{display:flex;gap:3px;background:rgba(255,255,255,0.04);border-radius:12px;padding:3px;margin-bottom:18px}
+.tab{flex:1;padding:8px;text-align:center;font-size:11.5px;font-weight:600;cursor:pointer;border-radius:10px;color:var(--tx2);transition:color .2s ease,background .2s ease;font-family:var(--M)}
+.tab.on{background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(147,51,234,0.2));color:var(--pur3);border:1px solid rgba(124,58,237,0.3)}
+.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}
+.cc{background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.1);border-radius:10px;padding:10px;text-align:center}
+.cc-l{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.cc-v{font-family:var(--M);font-size:13px;font-weight:500;color:var(--pur3)}
+.warn-strip{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:10px;margin-bottom:14px;font-size:11.5px;color:var(--gold);line-height:1.5}
+.info-strip{background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.12);border-radius:10px;padding:10px;margin-bottom:14px;font-size:11.5px;color:var(--sky);line-height:1.5}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:6px;font-size:9.5px;font-weight:600;font-family:var(--M)}
+.bg2{background:rgba(0,229,160,.1);color:var(--lime)}.br2{background:rgba(239,68,68,.1);color:var(--rose)}.by2{background:rgba(245,158,11,.1);color:var(--gold)}.bb2{background:rgba(6,182,212,.1);color:var(--sky)}.bp2{background:rgba(124,58,237,.1);color:var(--pur3)}
+
+/* APP */
+.app{display:none;height:100dvh;height:100vh;flex-direction:column;background:var(--bg);overflow:hidden;position:fixed;inset:0;padding-bottom:0}
+.app.on{display:flex}
+.app-scroll{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 10px);scroll-behavior:smooth;overscroll-behavior-y:contain;contain:strict}
+.app-scroll::-webkit-scrollbar{display:none}
+
+/* BOTTOM NAV */
+
+/* VIEWS */
+.view{display:none;padding:16px 16px 80px;contain:layout style}.view.on{display:block}
+
+/* WALLET CARD */
+.wc{border-radius:20px;background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 40%,#9333ea 70%,#a21caf 100%);padding:20px;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(124,58,237,0.4)}
+.wc::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.06)}
+.wc::after{content:'';position:absolute;bottom:-60px;left:-20px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.wc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:relative;z-index:1}
+.wc-lbl{font-size:11px;color:rgba(255,255,255,0.7);font-family:var(--M);text-transform:uppercase;letter-spacing:1px}
+.wc-eye{width:28px;height:28px;border-radius:99px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+.wc-add{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;transition:background .2s ease,transform .2s ease}
+.wc-add:hover{background:rgba(255,255,255,0.25)}
+.wc-bal{font-family:var(--H);font-size:34px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:16px;position:relative;z-index:1}
+.wc-bal span{font-size:20px;opacity:.8}
+.wc-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;margin-bottom:16px;position:relative;z-index:1}
+.wc-cell{background:rgba(255,255,255,0.08);padding:10px 12px}
+.wc-cell-l{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;font-family:var(--M)}
+.wc-cell-v{font-family:var(--H);font-size:15px;font-weight:700;color:#fff}
+.wc-chart{height:44px;display:flex;align-items:flex-end;gap:3px;padding:0 2px;margin-bottom:8px;position:relative;z-index:1}
+.wc-bar{flex:1;background:rgba(255,255,255,0.25);border-radius:3px 3px 0 0;min-height:4px}
+.wc-days{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.5);font-family:var(--M);position:relative;z-index:1}
+
+/* QA */
+.qa-wrap{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:16px;padding:14px;margin-bottom:16px}
+.qa-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.qa-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.qa-ic{width:44px;height:44px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.qa-item:active .qa-ic{transform:scale(0.88)}
+.qa-lbl{font-size:9px;font-weight:600;color:var(--tx3);text-align:center;font-family:var(--M);letter-spacing:.3px}
+
+/* PORTFOLIO CARD */
+.port-card{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:18px;padding:18px;margin-bottom:16px}
+.port-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.port-t{font-family:var(--H);font-size:15px;font-weight:700}
+.port-lk{font-size:12px;color:var(--pur3);cursor:pointer;display:flex;align-items:center;gap:3px}
+.port-content{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.donut-wrap{position:relative;flex-shrink:0}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-center-val{font-family:var(--H);font-size:16px;font-weight:800}
+.donut-center-lbl{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:.5px}
+.leg{flex:1}
+.leg-item{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rim)}
+.leg-item:last-child{border:none}
+.leg-l{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--tx2)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leg-v{font-family:var(--M);font-size:12px;font-weight:500}
+.today-earn{background:rgba(0,229,160,0.07);border:1px solid rgba(0,229,160,0.15);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.te-lbl{font-size:10px;color:rgba(0,229,160,0.7);font-family:var(--M);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px}
+.te-val{font-family:var(--H);font-size:20px;font-weight:800;color:var(--lime)}
+.te-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--lime);background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);border-radius:99px;padding:4px 10px;font-family:var(--M)}
+
+/* SECTION */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:16px}
+.sec-t{font-family:var(--H);font-size:15px;font-weight:700}
+.sec-lk{font-size:12px;color:var(--pur3);cursor:pointer}
+
+/* INVEST / ACTIVITY ITEMS */
+.inv-card{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s ease}
+.inv-card:hover{border-color:rgba(124,58,237,0.3)}
+.inv-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.inv-ic{width:36px;height:36px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.inv-nm{font-size:14px;font-weight:700;font-family:var(--H)}
+.inv-sb{font-size:10.5px;color:var(--tx2);font-family:var(--M)}
+.inv-rt{font-family:var(--H);font-size:18px;font-weight:800;margin-left:auto}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.stat-cell{background:rgba(255,255,255,0.04);border-radius:9px;padding:8px;text-align:center}
+.stat-l{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.stat-v{font-family:var(--M);font-size:12px;font-weight:500}
+.prog-wrap{background:rgba(255,255,255,0.07);border-radius:99px;height:5px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1);transform-origin:left}
+
+/* TX */
+.tx-item{display:flex;align-items:center;gap:11px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:13px;margin-bottom:8px}
+.tx-ic{width:36px;height:36px;border-radius:99px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tx-body{flex:1}
+.tx-t{font-size:13px;font-weight:600;font-family:var(--H);margin-bottom:2px}
+.tx-m{font-size:10.5px;color:var(--tx3);font-family:var(--M)}
+.tx-amt{font-family:var(--M);font-size:14px;font-weight:500}
+.tx-st{font-size:10px;font-family:var(--M);text-align:right;margin-top:2px}
+.proc{color:#fb923c}.comp{color:var(--lime)}
+
+/* PLAN CARDS (invest page) */
+.plan-card{border-radius:18px;overflow:hidden;margin-bottom:16px;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 24px rgba(0,0,0,0.3);will-change:transform}
+.plan-card:hover{transform:translateY(-3px)}
+.pb{height:140px;display:flex;align-items:center;padding:16px 20px;position:relative;overflow:hidden}
+.pb-sh{font-size:62px;filter:drop-shadow(0 4px 20px rgba(255,255,255,0.25));position:relative;z-index:1;transition:transform .3s}
+.plan-card:hover .pb-sh{transform:scale(1.06) rotate(-4deg)}
+.pb-r{margin-left:auto;text-align:right;position:relative;z-index:1}
+.pb-nm{font-family:var(--H);font-size:22px;font-weight:800;color:#fff}
+.pb-br{font-size:11px;color:rgba(255,255,255,0.65)}
+.pb-tag{position:absolute;bottom:10px;left:14px;z-index:2;padding:4px 12px;border-radius:99px;font-size:10.5px;font-weight:700;font-family:var(--M)}
+.pb-body{padding:16px;background:rgba(20,16,40,0.95);border:1px solid rgba(255,255,255,0.06);border-top:none}
+.pb-nr{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--rim);margin-bottom:12px}
+.pb-ic{width:34px;height:34px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.pb-nm2{font-size:15px;font-weight:700;font-family:var(--H)}
+.pb-ds{font-size:11px;color:var(--tx2)}
+.pb-rb{font-family:var(--H);font-size:22px;font-weight:800}
+.pb-dl{font-size:10px;color:var(--tx3);font-family:var(--M)}
+.pb-ig{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.pb-ic2{background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px}
+.pb-il{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.pb-iv{font-size:14px;font-weight:700;font-family:var(--H)}
+.pb-pr{display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);margin-bottom:14px;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px}
+
+/* MY INVESTMENTS */
+.mi-hd{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:16px;padding:16px;margin-bottom:16px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;background:rgba(255,255,255,0.02);border:1.5px dashed var(--rim);border-radius:16px;text-align:center}
+
+/* HISTORY */
+.hist-banner{background:linear-gradient(135deg,#1e1b4b,#4c1d95);border-radius:18px;padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.hist-banner::after{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.hb-t{font-family:var(--H);font-size:20px;font-weight:800;color:#fff;margin-bottom:2px;position:relative;z-index:1}
+.hb-s{font-size:11.5px;color:rgba(255,255,255,0.6);position:relative;z-index:1;margin-bottom:14px}
+.hb-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative;z-index:1}
+.hb-cell{background:rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px}
+.hb-cl{font-size:9px;color:rgba(255,255,255,0.55);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.hb-cv{font-family:var(--H);font-size:16px;font-weight:800;color:#fff}
+.htabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.htabs::-webkit-scrollbar{display:none}
+.htab{padding:7px 16px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:var(--M);border:1px solid var(--rim);color:var(--tx2);background:rgba(255,255,255,0.04);transition:border-color .2s ease,background .2s ease,color .2s ease}
+.htab.on{background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(124,58,237,0.3)}
+.hist-tx{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:14px;padding:14px;margin-bottom:10px}
+.htx-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.htx-ic{width:36px;height:36px;border-radius:10px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;font-size:16px}
+.htx-t{font-size:14px;font-weight:700;font-family:var(--H)}
+.htx-proc{display:inline-block;padding:2px 9px;border-radius:99px;font-size:9.5px;font-weight:700;font-family:var(--M);background:rgba(6,182,212,0.1);color:var(--sky)}
+.htx-via{font-size:11px;color:var(--tx3);margin-left:6px;font-family:var(--M)}
+.htx-amt{font-family:var(--H);font-size:18px;font-weight:800;margin-left:auto;color:var(--lime)}
+.htx-id{font-family:var(--M);font-size:10px;color:var(--tx3)}
+.htx-ref{background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.htx-rl{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.htx-rv{font-family:var(--M);font-size:11px;color:var(--tx)}
+.htx-time{font-size:10.5px;color:var(--tx3);font-family:var(--M);display:flex;align-items:center;gap:5px}
+
+/* PROFILE */
+.prof-banner{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:18px;padding:18px;margin-bottom:14px}
+.prof-av-row{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.prof-av{width:60px;height:60px;border-radius:99px;background:linear-gradient(135deg,var(--pur),var(--pur2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;font-family:var(--H);color:#fff;flex-shrink:0}
+.prof-nm{font-family:var(--H);font-size:19px;font-weight:800}
+.prof-ph{font-family:var(--M);font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:5px;margin-top:3px}
+.prof-sg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.prof-sc{background:rgba(255,255,255,0.04);border:1px solid var(--rim);border-radius:12px;padding:12px}
+.prof-sl{font-size:9.5px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.prof-sv{font-family:var(--H);font-size:18px;font-weight:800}
+.ref-card{background:rgba(255,255,255,0.03);border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:16px;margin-bottom:12px}
+.ref-t{font-family:var(--H);font-size:14px;font-weight:700;margin-bottom:3px}
+.ref-s{font-size:11.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5}
+.ref-row{display:flex;align-items:center;gap:9px}
+.ref-code{flex:1;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:10px 14px;font-family:var(--M);font-size:14px;font-weight:700;color:var(--pur3);letter-spacing:1.5px}
+.ref-cbtn{background:linear-gradient(135deg,var(--pur),var(--pur2));border:none;border-radius:10px;padding:10px 16px;font-family:var(--M);font-size:11px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.inv-hist{background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:16px;overflow:hidden}
+.ihs-hd{padding:14px 16px;border-bottom:1px solid var(--rim);font-family:var(--H);font-size:14px;font-weight:700}
+.ihs-empty{padding:32px;text-align:center;color:var(--tx3);font-size:13px}
+.signout{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.22);color:var(--rose);font-size:14px;font-weight:700;font-family:var(--H);cursor:pointer;margin-bottom:16px;transition:background .2s ease}
+.signout:hover{background:rgba(239,68,68,0.18)}
+.invite-card{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.grow-card{background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(99,102,241,.3);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.support-row{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:13px;padding:14px;margin-bottom:16px;cursor:pointer}
+.invest-banner{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.login-pg{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;position:relative;z-index:1;background:var(--bg)}
+
+@media(min-width:480px){.view{padding:20px 20px 0}.mbox{border-radius:24px;margin:auto;margin-bottom:20px}}
+/* ═══════════ APP CHROME: top bar · side menu · bottom nav ═══════════ */
+.ico{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Top bar */
+.appbar{flex-shrink:0;height:60px;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px;padding-inline:max(14px,calc((100% - 720px)/2 + 14px));background:rgba(13,13,20,.82);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid transparent;position:relative;z-index:200;transition:border-color .25s ease,box-shadow .25s ease}
+.appbar.scrolled{border-bottom-color:var(--rim);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.ab-left,.ab-right{display:flex;align-items:center;gap:8px;min-width:0}
+.ab-logo{display:flex;align-items:center;gap:9px;cursor:pointer;min-width:0;-webkit-tap-highlight-color:transparent}
+.ab-mark{width:30px;height:30px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,var(--pur),var(--pur2));display:grid;place-items:center;font-family:var(--H);font-size:14px;font-weight:800;color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.38)}
+.ab-name{line-height:1.25;font-family:var(--H);font-size:16.5px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .13s ease,transform .13s ease}
+.ab-name.out{opacity:0;transform:translateY(4px)}
+.ab-name em{color:var(--pur3);font-style:normal}
+.ab-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:transparent;border:0;color:var(--tx);cursor:pointer;position:relative;transition:background .18s ease,transform .18s ease;-webkit-tap-highlight-color:transparent}
+.ab-btn svg{width:22px;height:22px}
+.ab-btn:hover{background:rgba(255,255,255,.06)}
+.ab-btn:active{transform:scale(.92);background:rgba(255,255,255,.1)}
+.ab-count{position:absolute;top:3px;right:2px;min-width:18px;height:18px;padding:0 4px;border-radius:99px;box-sizing:border-box;background:var(--rose);color:#fff;font:700 10px/14px var(--B);text-align:center;border:2px solid #0d0d14}
+.ab-count[hidden]{display:none}
+.ab-av{width:36px;height:36px;border-radius:50%;border:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff;font:800 14px var(--H);cursor:pointer;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px rgba(168,85,247,.45);transition:transform .18s ease;-webkit-tap-highlight-color:transparent}
+.ab-av:active{transform:scale(.92)}
+.app-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-bottom) + 24px)}
+
+/* Page change */
+.view.on{animation:viewIn .26s cubic-bezier(.22,1,.36,1) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Side menu */
+.dr-ov{position:fixed;inset:0;z-index:900;background:rgba(4,4,10,.62);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .28s ease,visibility 0s linear .28s;touch-action:none}
+.dr-ov.on{opacity:1;visibility:visible;transition:opacity .28s ease}
+.dr{position:fixed;top:0;bottom:0;left:0;z-index:910;width:min(86vw,320px);display:flex;flex-direction:column;background:linear-gradient(180deg,#16162b 0%,#101020 40%,#0d0d18 100%);border-right:1px solid var(--rim2);box-shadow:24px 0 60px rgba(0,0,0,.5);transform:translateX(-102%);visibility:hidden;transition:transform .34s cubic-bezier(.22,1,.36,1),visibility 0s linear .34s;padding-top:env(safe-area-inset-top,0px);padding-bottom:var(--safe-bottom)}
+.dr.on{transform:none;visibility:visible;transition:transform .34s cubic-bezier(.22,1,.36,1)}
+.dr.drag{transition:none}
+.dr-hd{padding:16px 14px 14px 16px}
+.dr-user{display:flex;align-items:center;gap:12px}
+.dr-av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(135deg,var(--pur),var(--pur2));font:800 18px var(--H);color:#fff}
+.dr-id{flex:1;min-width:0}
+.dr-name{font:700 15.5px/1.2 var(--H);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dr-mail{font-size:12px;color:var(--tx2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dr-mail:empty{display:none}
+.dr-bal{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px 12px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(124,58,237,.30),rgba(124,58,237,.10));border:1px solid rgba(124,58,237,.34)}
+.dr-bal-l{font-size:11.5px;color:var(--tx2)}
+.dr-bal-v{font:800 20px/1.2 var(--H);margin-top:2px;letter-spacing:-.4px}
+.dr-add{height:34px;padding:0 14px;border-radius:10px;border:0;background:#fff;color:#1a1033;font:700 12.5px var(--B);cursor:pointer;transition:transform .15s ease;-webkit-tap-highlight-color:transparent}
+.dr-add:active{transform:scale(.94)}
+.dr-nav{flex:1;min-height:0;overflow-y:auto;padding:2px 10px 8px;scrollbar-width:none}
+.dr-nav::-webkit-scrollbar{display:none}
+.dr-sec{font-size:12px;font-weight:600;color:rgba(240,240,255,.42);padding:14px 10px 6px}
+.dr-it{width:100%;display:flex;align-items:center;gap:13px;height:46px;padding:0 10px;border:0;border-radius:12px;background:transparent;color:var(--tx2);font:500 14.5px var(--B);text-align:left;cursor:pointer;position:relative;transition:background .16s ease,color .16s ease;-webkit-tap-highlight-color:transparent}
+.dr-it svg{width:21px;height:21px;flex-shrink:0}
+.dr-it:hover{background:rgba(255,255,255,.05);color:var(--tx)}
+.dr-it:active{background:rgba(255,255,255,.09)}
+.dr-it.on{background:rgba(124,58,237,.17);color:#fff;font-weight:600}
+.dr-it.on svg{color:var(--pur3)}
+.dr-it.on::before{content:'';position:absolute;left:-10px;top:11px;bottom:11px;width:3px;border-radius:0 3px 3px 0;background:var(--pur3)}
+.dr-pill{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--rose);color:#fff;font:700 11px/20px var(--B);text-align:center}
+.dr-pill[hidden]{display:none}
+.dr-ft{padding:10px 16px 14px;border-top:1px solid var(--rim)}
+.dr-out{width:100%;height:46px;border-radius:12px;border:1px solid rgba(239,68,68,.26);background:rgba(239,68,68,.08);color:#ff7b7b;display:flex;align-items:center;justify-content:center;gap:9px;font:600 14px var(--B);cursor:pointer;transition:background .16s ease;-webkit-tap-highlight-color:transparent}
+.dr-out svg{width:19px;height:19px}
+.dr-out:hover{background:rgba(239,68,68,.15)}
+.dr-ver{margin-top:10px;text-align:center;font-size:11px;color:var(--tx3)}
+
+/* Bottom nav */
+.bnav{--i:0;position:fixed;left:0;right:0;bottom:0;z-index:300;display:flex;height:calc(var(--nav-h) + var(--safe-bottom));min-height:0;max-height:none;padding:0 6px var(--safe-bottom);overflow:visible;align-items:stretch;background:rgba(12,12,22,.88);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);border-top:1px solid var(--rim)}
+.bnav::before,.bnav::after{display:none}
+.bn-ind{position:absolute;top:0;left:6px;width:calc((100% - 12px)/5);height:var(--nav-h);pointer-events:none;transform:translateX(calc(var(--i)*100%));transition:transform .46s cubic-bezier(.3,1.25,.5,1)}
+.bn-ind::before{content:'';position:absolute;top:9px;left:50%;width:56px;height:32px;margin-left:-28px;border-radius:16px;background:linear-gradient(180deg,rgba(124,58,237,.32),rgba(124,58,237,.16));box-shadow:inset 0 0 0 1px rgba(168,85,247,.28)}
+.bn{flex:1 1 0;min-width:0;height:var(--nav-h);max-height:none;padding:9px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;border:0;border-radius:0;background:none;color:var(--tx2);font-family:var(--B);cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:color .2s ease;will-change:auto}
+.bn:active{transform:none}
+.bn-ic{width:56px;height:32px;display:grid;place-items:center;position:relative;z-index:1;transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.bn-ic svg{width:22px;height:22px;transition:color .2s ease,fill .25s ease}
+.bn:active .bn-ic{transform:scale(.88)}
+.bn-lbl{font-size:11px;font-weight:600;letter-spacing:.1px;line-height:1;text-transform:none;font-family:var(--B);color:inherit}
+.bn.on{color:#fff}
+.bn.on .bn-ic svg{color:var(--pur3);fill:rgba(168,85,247,.28);stroke-width:1.95}
+.bn.on .bn-ic{animation:bnPop .4s cubic-bezier(.3,1.5,.5,1)}
+@keyframes bnPop{0%{transform:scale(.82)}100%{transform:scale(1)}}
+
+/* Support button */
+.contact-float{position:fixed;right:16px;bottom:calc(var(--nav-h) + var(--safe-bottom) + 14px);z-index:250;width:48px;height:48px;padding:0;border-radius:50%;border:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(124,58,237,.45),inset 0 0 0 1px rgba(255,255,255,.18);transition:transform .3s cubic-bezier(.22,1,.36,1),opacity .25s ease;-webkit-tap-highlight-color:transparent}
+.contact-float svg{width:22px;height:22px}
+.contact-float:active{transform:scale(.92)}
+.contact-float.hide{transform:translateY(20px) scale(.8);opacity:0;pointer-events:none}
+
+/* Focus + motion */
+.ab-btn:focus-visible,.ab-av:focus-visible,.bn:focus-visible,.dr-it:focus-visible,.dr-add:focus-visible,.dr-out:focus-visible,.contact-float:focus-visible,.ab-logo:focus-visible{outline:2px solid var(--pur3);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.view.on,.bn.on .bn-ic{animation:none}.bn-ind,.dr,.dr-ov,.ab-name,.contact-float{transition-duration:.01ms}}
+
+/* Wide screens: centered column + floating nav */
+@media(min-width:768px){
+  .view{max-width:720px;margin-left:auto;margin-right:auto}
+  .app-scroll{padding-bottom:calc(var(--nav-h) + 56px)}
+  .bnav{left:50%;right:auto;width:min(460px,calc(100% - 32px));bottom:16px;height:var(--nav-h);padding:0 8px;border:1px solid var(--rim2);border-radius:24px;transform:translateX(-50%);box-shadow:0 20px 50px rgba(0,0,0,.55)}
+  .bn-ind{left:8px;width:calc((100% - 16px)/5)}
+  .contact-float{right:max(20px,calc((100vw - 720px)/2 + 20px));bottom:96px}
+}
+</style>
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyA0WXbkFFPYavIpJEv0BhY6NMKxTzoXpC8",
+  authDomain: "stake-89131.firebaseapp.com",
+  projectId: "stake-89131",
+  storageBucket: "stake-89131.firebasestorage.app",
+  messagingSenderId: "1018689965703",
+  appId: "1:1018689965703:web:78e83a4e9236863886b222",
+  measurementId: "G-PF3RC7XBGR"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+window._fbAuth = auth;
+window._fbProvider = provider;
+window._fbSignInWithPopup = signInWithPopup;
+window._fbSignOut = fbSignOut;
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h16"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V5"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2A6.5 6.5 0 0 1 21.5 20"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="m16 8 4 4-4 4"/><path d="M20 12H9"/></symbol>
+</svg>
+
+<div class="bg-grad"></div>
+<div class="loader" id="loader">
+  <div class="loader-logo">S</div>
+  <div class="loader-txt">StakeDX</div>
+  <div class="loader-sub">Loading platform...</div>
+</div>
+<div class="toast-c"><div class="toast" id="toast"></div></div>
+
+<!-- LANDING -->
+<div id="s-landing" style="display:none">
+  <div class="pbar" id="pbar"></div>
+  <div class="landing">
+    <div class="hero">
+      <div class="hero-badge">🔐 Smart Contract Secured</div>
+      <h1 class="h1">Stake <span class="g">USDT.</span><br>Earn Every Day.</h1>
+      <p class="h-sub">The most transparent USDT yield platform. Lock assets, compound daily returns, full transparency.</p>
+      <div class="h-cta">
+        <button class="btn b-pur b-lg" onclick="showLogin()">Start Earning Free →</button>
+        <button class="btn b-out b-lg" onclick="document.getElementById('psec').scrollIntoView({behavior:'smooth'})">View Plans</button>
+      </div>
+      <div class="h-stats">
+        <div><div class="hs-v">$4.2M+</div><div class="hs-l">Value Locked</div></div>
+        <div><div class="hs-v">8,247</div><div class="hs-l">Investors</div></div>
+        <div><div class="hs-v">2.5%</div><div class="hs-l">Max Daily ROI</div></div>
+        <div><div class="hs-v">$1.2M+</div><div class="hs-l">Profits Paid</div></div>
+      </div>
+    </div>
+    <div class="trust">
+      <div class="tr-it"><span>🔒</span>Multi-Sig Custody</div>
+      <div class="tr-it"><span>⚡</span>Daily Compounding</div>
+      <div class="tr-it"><span>🌐</span>TRC20 & ERC20</div>
+      <div class="tr-it"><span>🛡️</span>Insured Funds</div>
+      <div class="tr-it"><span>👥</span>5% Referral</div>
+    </div>
+    <div class="l-sec" id="psec" style="content-visibility:auto;contain-intrinsic-size:0 500px">
+      <div class="l-title">Yield <span class="grad">Plans</span></div>
+      <p class="l-sub">Daily compounding returns. Principal returned at maturity.</p>
+      <div class="lp-grid" id="lPlans"></div>
+    </div>
+    <div class="l-sec" style="padding-top:0">
+      <div class="l-title">ROI <span class="grad">Calculator</span></div>
+      <p class="l-sub">Estimate your returns before committing.</p>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--rim);border-radius:18px;padding:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="fg"><label class="fl">Amount (USDT)</label><input class="fi fi-m" type="number" id="cAmt" value="500" oninput="calcR()"/></div>
+          <div class="fg"><label class="fl">Plan</label><select class="fi" id="cPlan" onchange="calcR()"><option value="0">Basic 0.8%</option><option value="1">Starter 1.2%</option><option value="2">Silver 1.5%</option><option value="3" selected>Gold 2.0%</option><option value="4">Elite 2.5%</option></select></div>
+        </div>
+        <div class="calc-grid" id="cRes"></div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:50px 20px 100px;border-top:1px solid var(--rim)">
+      <div class="l-title" style="margin-bottom:8px">Ready to <span class="grad">Start?</span></div>
+      <p class="l-sub" style="margin-bottom:24px">Join 8,247 investors earning daily.</p>
+      <button class="btn b-pur b-lg" onclick="showLogin()">Create Free Account</button>
+      <div style="margin-top:28px;font-size:10.5px;color:var(--tx3);font-family:var(--M)">© 2025 StakeDX · Privacy · Terms · Risk Disclosure</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="s-login" style="display:none">
+  <div class="login-pg">
+    <div style="width:100%;max-width:380px">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="display:inline-flex;align-items:center;gap:9px;margin-bottom:10px">
+          <div class="ab-mark" style="width:44px;height:44px;font-size:19px">S</div>
+          <span style="font-family:var(--H);font-size:24px;font-weight:800">Stake<em style="color:var(--pur3);font-style:normal">DX</em></span>
+        </div>
+        <p style="color:var(--tx2);font-size:13px;margin-top:4px">Sign in to start earning</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,58,237,0.25);border-radius:24px;padding:28px 24px;box-shadow:0 8px 40px rgba(124,58,237,0.15)">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:6px">Welcome to <strong style="color:var(--tx)">StakeDX</strong></div>
+          <div style="font-size:11px;color:var(--tx3);font-family:var(--M)">Continue with your Google account</div>
+        </div>
+        <div id="loginErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--rose);margin-bottom:14px"></div>
+        <button onclick="doGoogleLogin()" id="gBtn" style="width:100%;height:52px;background:#fff;color:#1f1f1f;border:1.5px solid #e0e0e0;border-radius:16px;font-size:14px;font-weight:600;font-family:var(--B);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:box-shadow .2s ease,transform .15s ease;box-shadow:0 2px 12px rgba(0,0,0,0.15)" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.15)'">
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.13 0 5.94 1.08 8.15 2.84l6.08-6.08C34.32 3.09 29.43 1 24 1 14.95 1 7.23 6.39 3.67 14.09l7.08 5.5C12.54 13.37 17.81 9.5 24 9.5z"/><path fill="#4285F4" d="M46.52 24.5c0-1.56-.14-3.06-.4-4.5H24v8.52h12.62c-.55 2.94-2.2 5.43-4.69 7.1l7.22 5.61C43.38 37.16 46.52 31.27 46.52 24.5z"/><path fill="#FBBC05" d="M10.75 28.41A14.63 14.63 0 0 1 9.5 24c0-1.54.26-3.03.73-4.41l-7.08-5.5A23.95 23.95 0 0 0 0 24c0 3.86.92 7.51 2.54 10.73l8.21-6.32z"/><path fill="#34A853" d="M24 47c5.43 0 9.99-1.8 13.32-4.87l-7.22-5.61c-1.8 1.21-4.1 1.93-6.1 1.93-6.19 0-11.46-3.87-13.25-9.32l-8.21 6.32C7.23 41.61 14.95 47 24 47z"/></svg>
+          Continue with Google
+        </button>
+        <div style="margin-top:18px;text-align:center;font-size:10.5px;color:var(--tx3);font-family:var(--M)">🔒 Secured by multi-sig smart contracts</div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- APP -->
+<div class="app" id="s-app">
+  <header class="appbar" id="appbar">
+    <div class="ab-left">
+      <button class="ab-btn" id="menuBtn" onclick="openDrawer()" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="drawer"><svg class="ico"><use href="#i-menu"/></svg></button>
+      <div class="ab-logo" onclick="navTo('home')">
+        <div class="ab-mark">S</div>
+        <span class="ab-name" id="abTitle">Stake<em>DX</em></span>
+      </div>
+    </div>
+    <div class="ab-right">
+      <button class="ab-btn" onclick="openNotifs()" aria-label="Notifications"><svg class="ico"><use href="#i-bell"/></svg><span class="ab-count" id="abCount" hidden>0</span></button>
+      <button class="ab-av" id="abAv" onclick="navTo('profile')" aria-label="Open profile">S</button>
+    </div>
+  </header>
+  <div class="app-scroll" id="appScroll">
+    <!-- HOME -->
+    <div id="v-home" class="view on">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
+        <div><div style="font-family:var(--H);font-size:18px;font-weight:700;margin-bottom:2px" id="greetName">Good Evening, User 🌙</div><div style="font-size:12px;color:var(--tx2)">Here's your financial overview</div></div>
+        <div style="width:38px;height:38px;border-radius:99px;background:linear-gradient(135deg,var(--pur),var(--pur2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-family:var(--H);color:#fff;flex-shrink:0" id="greetAv">U</div>
+      </div>
+      <div class="wc">
+        <div class="wc-top">
+          <div><div class="wc-lbl">Total Wallet Balance</div></div>
+          <div style="display:flex;gap:9px;align-items:center">
+            <div class="wc-eye" onclick="toggleBal()">👁</div>
+            <div class="wc-add" onclick="openDep()"><span style="font-size:14px">＋</span> Add Money</div>
+          </div>
+        </div>
+        <div class="wc-bal"><span>$</span><span id="wcBal">0.00</span></div>
+        <div class="wc-row">
+          <div class="wc-cell"><div class="wc-cell-l">Total Invested</div><div class="wc-cell-v" id="wcInv">$0.00</div></div>
+          <div class="wc-cell"><div class="wc-cell-l">Total Earnings</div><div class="wc-cell-v" id="wcEarn">$0.00</div></div>
+        </div>
+        <div class="wc-chart" id="wcChart"></div>
+        <div class="wc-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+      </div>
+      <div class="qa-wrap"><div class="qa-grid" id="qaGrid"></div></div>
+      <div class="port-card">
+        <div class="port-hd"><span class="port-t">Your Portfolio</span><span class="port-lk" onclick="navTo('plans')">↗</span></div>
+        <div class="port-content">
+          <div class="donut-wrap">
+            <canvas id="donutC" width="100" height="100"></canvas>
+            <div class="donut-center"><div class="donut-center-val" id="donutV">0</div><div class="donut-center-lbl">active</div></div>
+          </div>
+          <div class="leg">
+            <div class="leg-item"><span class="leg-l"><span class="leg-dot" style="background:#7c3aed"></span>Active Plans</span><span class="leg-v" id="legA">0</span></div>
+            <div class="leg-item"><span class="leg-l"><span class="leg-dot" style="background:#06b6d4"></span>Completed</span><span class="leg-v" id="legD">0</span></div>
+            <div class="leg-item"><span class="leg-l"><span class="leg-dot" style="background:#f59e0b"></span>Withdrawn</span><span class="leg-v" id="legW">0</span></div>
+          </div>
+        </div>
+        <div style="font-family:var(--H);font-size:22px;font-weight:800;margin-bottom:12px" id="portV">$0.00</div>
+
+      </div>
+      <div class="sec-hd"><span class="sec-t">Active Investments</span><span class="sec-lk" onclick="navTo('plans')">View All</span></div>
+      <div id="homeStakes"></div>
+      <div style="margin-top:16px">
+        <div class="invite-card">
+          <div><div style="font-family:var(--H);font-size:15px;font-weight:800;color:#fff;margin-bottom:3px">Invite &amp; Earn</div><div style="font-size:11.5px;color:rgba(255,255,255,0.7);margin-bottom:12px">Earn 5% commission per referral deposit</div><div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:7px 16px;font-size:12px;font-weight:700;color:#fff;cursor:pointer" onclick="navTo('profile')">👥 Invite Now</div></div>
+          <div style="font-size:36px">🎁</div>
+        </div>
+      </div>
+      <div class="sec-hd" style="margin-top:6px"><span class="sec-t">Recent Transactions</span><span class="sec-lk" onclick="navTo('history')">View All</span></div>
+      <div id="homeTxs"></div>
+      <div class="grow-card">
+        <div><div style="font-family:var(--H);font-size:15px;font-weight:800;color:var(--pur3);margin-bottom:3px">Grow Wealth Smartly</div><div style="font-size:11.5px;color:rgba(255,255,255,0.6);margin-bottom:12px">Start investing with trusted plans</div><button class="btn b-pur b-sm" style="border-radius:99px" onclick="navTo('invest')">Explore Plans ↗</button></div>
+        <div style="width:44px;height:44px;border-radius:99px;background:rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;font-size:20px">📈</div>
+      </div>
+      <div class="support-row" onclick="openContact()">
+        <div style="width:38px;height:38px;border-radius:99px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">💬</div>
+        <div><div style="font-size:14px;font-weight:700;font-family:var(--H)">Support Center</div><div style="font-size:11.5px;color:var(--tx2)">Get help · Contact us</div></div>
+        <div style="margin-left:auto;color:var(--pur3);font-size:16px">↗</div>
+      </div>
+    </div>
+    <!-- INVEST -->
+    <div id="v-invest" class="view">
+      <div class="invest-banner">
+        <div><div style="font-family:var(--H);font-size:18px;font-weight:800;color:#fff;margin-bottom:4px">Secure. Simple. Smart.</div><div style="font-size:12px;color:rgba(255,255,255,0.7)">Choose from trusted investment plans</div></div>
+        <div style="font-size:28px">💰</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-family:var(--M);font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px">Popular Plans</span>
+        <span style="font-size:12px;color:var(--pur3);cursor:pointer" onclick="navTo('plans')">View All</span>
+      </div>
+      <div id="investPlans"></div>
+    </div>
+    <!-- PLANS (My Investments) -->
+    <div id="v-plans" class="view">
+      <div class="mi-hd"><div style="font-size:28px">🪙</div><div><div style="font-family:var(--H);font-size:17px;font-weight:800">My Investments</div><div style="font-size:11.5px;color:var(--tx2);margin-top:2px">Redeem matured · Partial withdraw from active</div></div></div>
+      <div id="myInvContent"></div>
+    </div>
+    <!-- HISTORY -->
+    <div id="v-history" class="view">
+      <div class="hist-banner">
+        <div class="hb-t">My Transactions</div>
+        <div class="hb-s" id="histSub">0 total · 0 pending</div>
+        <div class="hb-row">
+          <div class="hb-cell"><div class="hb-cl">Total Deposited</div><div class="hb-cv" id="hbDep">$0</div></div>
+          <div class="hb-cell"><div class="hb-cl">Total Withdrawn</div><div class="hb-cv" id="hbWd">$0</div></div>
+        </div>
+      </div>
+      <div class="htabs">
+        <div class="htab on" onclick="setHTab('all',this)">All</div>
+        <div class="htab" onclick="setHTab('deposit',this)">Deposits</div>
+        <div class="htab" onclick="setHTab('withdrawal',this)">Withdrawals</div>
+        <div class="htab" onclick="setHTab('stake',this)">Investments</div>
+        <div class="htab" onclick="setHTab('earnings',this)">Earnings</div>
+      </div>
+      <div id="histList"></div>
+    </div>
+    <!-- PROFILE -->
+    <div id="v-profile" class="view">
+      <div class="prof-banner">
+        <div class="prof-av-row">
+          <div class="prof-av" id="profAv">U</div>
+          <div><div class="prof-nm" id="profNm">Investor</div><div class="prof-ph"><span>📞</span><span id="profPh">—</span></div></div>
+        </div>
+        <div class="prof-sg">
+          <div class="prof-sc"><div class="prof-sl">⚡ Active Plans</div><div class="prof-sv" id="pS1">0</div></div>
+          <div class="prof-sc"><div class="prof-sl">📅 Member Since</div><div class="prof-sv" id="pS2">—</div></div>
+          <div class="prof-sc"><div class="prof-sl">📈 Total Invested</div><div class="prof-sv" id="pS3">$0</div></div>
+          <div class="prof-sc"><div class="prof-sl">💰 Wallet Balance</div><div class="prof-sv" id="pS4">$0.00</div></div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-t">Your Referral Code</div>
+        <div class="ref-s">Share and earn 5% bonus on every referral deposit</div>
+        <div class="ref-row">
+          <div class="ref-code" id="refCode">STDK-XXXX</div>
+          <button class="ref-cbtn" onclick="cpTxt(document.getElementById('refCode').textContent,this)">📋 Copy</button>
+        </div>
+      </div>
+      <!-- Apply referral code section (shown if not yet applied) -->
+      <div id="applyRefCard" style="display:none;background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.2);border-radius:16px;padding:16px;margin-bottom:12px">
+        <div style="font-family:var(--H);font-size:14px;font-weight:700;margin-bottom:3px;color:var(--lime)">🎁 Apply Referral Code</div>
+        <div style="font-size:11.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5">Have someone's referral code? Apply it to link accounts.</div>
+        <button class="btn b-fw" style="background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);color:var(--lime);border-radius:12px;height:42px" onclick="document.getElementById('mRef').classList.add('on')">Enter Referral Code →</button>
+      </div>
+      <div class="sec-hd"><span class="sec-t">Investment History</span></div>
+      <div class="inv-hist"><div class="ihs-hd">All Investments</div><div class="ihs-empty" id="invHistE">No investments yet</div><div id="invHistL"></div></div>
+      <div style="margin-top:14px"></div>
+      <button class="signout" onclick="doLogout()">↪ Sign Out</button>
+      <button class="btn b-pur b-fw" id="contactBtn" onclick="openContact()" style="margin-bottom:20px;height:48px">💬 Contact Support</button>
+    </div>
+  </div>
+  <!-- BOTTOM NAV -->
+  <nav class="bnav" aria-label="Primary">
+    <span class="bn-ind" aria-hidden="true"></span>
+    <button class="bn on" id="bn-home" onclick="navTo('home')" aria-label="Home" aria-current="page"><span class="bn-ic"><svg class="ico"><use href="#i-home"/></svg></span><span class="bn-lbl">Home</span></button>
+    <button class="bn" id="bn-invest" onclick="navTo('invest')" aria-label="Invest"><span class="bn-ic"><svg class="ico"><use href="#i-bolt"/></svg></span><span class="bn-lbl">Invest</span></button>
+    <button class="bn" id="bn-plans" onclick="navTo('plans')" aria-label="My plans"><span class="bn-ic"><svg class="ico"><use href="#i-layers"/></svg></span><span class="bn-lbl">Plans</span></button>
+    <button class="bn" id="bn-history" onclick="navTo('history')" aria-label="History"><span class="bn-ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="bn-lbl">History</span></button>
+    <button class="bn" id="bn-profile" onclick="navTo('profile')" aria-label="Profile"><span class="bn-ic"><svg class="ico"><use href="#i-user"/></svg></span><span class="bn-lbl">Profile</span></button>
+  </nav>
+  <button class="contact-float" id="contactFloat" onclick="openContact()" aria-label="Contact support" title="Contact support"><svg class="ico"><use href="#i-chat"/></svg></button>
+<!-- SIDE MENU -->
+<div class="dr-ov" id="drOv" onclick="closeDrawer()"></div>
+<aside class="dr" id="drawer" role="dialog" aria-modal="true" aria-label="Main menu" aria-hidden="true">
+  <div class="dr-hd">
+    <div class="dr-user">
+      <div class="dr-av" id="drAv">S</div>
+      <div class="dr-id"><div class="dr-name" id="drName">Investor</div><div class="dr-mail" id="drMail"></div></div>
+      <button class="ab-btn" id="drClose" onclick="closeDrawer()" aria-label="Close menu"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="dr-bal">
+      <div><div class="dr-bal-l">Wallet balance</div><div class="dr-bal-v" id="drBal">$0.00</div></div>
+      <button class="dr-add" onclick="drGo('dep')">Add money</button>
+    </div>
+  </div>
+  <nav class="dr-nav" aria-label="Menu">
+    <div class="dr-sec">Navigate</div>
+    <button class="dr-it on" data-view="home" onclick="drGo('home')"><svg class="ico"><use href="#i-home"/></svg>Home</button>
+    <button class="dr-it" data-view="invest" onclick="drGo('invest')"><svg class="ico"><use href="#i-bolt"/></svg>Invest</button>
+    <button class="dr-it" data-view="plans" onclick="drGo('plans')"><svg class="ico"><use href="#i-layers"/></svg>My plans</button>
+    <button class="dr-it" data-view="history" onclick="drGo('history')"><svg class="ico"><use href="#i-clock"/></svg>History</button>
+    <button class="dr-it" data-view="profile" onclick="drGo('profile')"><svg class="ico"><use href="#i-user"/></svg>Profile</button>
+    <div class="dr-sec">Wallet</div>
+    <button class="dr-it" onclick="drGo('dep')"><svg class="ico"><use href="#i-down"/></svg>Deposit</button>
+    <button class="dr-it" onclick="drGo('wd')"><svg class="ico"><use href="#i-up"/></svg>Withdraw</button>
+    <div class="dr-sec">More</div>
+    <button class="dr-it" onclick="drGo('notif')"><svg class="ico"><use href="#i-bell"/></svg>Notifications<span class="dr-pill" id="drNotifN" hidden>0</span></button>
+    <button class="dr-it" onclick="drGo('ref')"><svg class="ico"><use href="#i-users"/></svg>Refer and earn</button>
+    <button class="dr-it" onclick="drGo('help')"><svg class="ico"><use href="#i-chat"/></svg>Help and support</button>
+  </nav>
+  <div class="dr-ft">
+    <button class="dr-out" onclick="drGo('out')"><svg class="ico"><use href="#i-out"/></svg>Sign out</button>
+    <div class="dr-ver">StakeDX v7</div>
+  </div>
+</aside>
+</div>
+
+<!-- MODALS -->
+<div class="mw" id="mDep">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="closeDep()">✕</span></div>
+    <div class="m-title" id="mDepT">Deposit USDT</div>
+    <p class="m-sub">Select network and amount. Min $10 USDT.</p>
+      <div id="dS1">
+      <div class="fg"><label class="fl">Network</label><div class="net-sel"><div class="n-opt on" id="ntrc" onclick="selNet('TRC20')">🌐 TRC20<div style="font-size:9px;font-weight:400;margin-top:2px;opacity:.6;font-family:var(--M)">Tron · $1 fee</div></div><div class="n-opt off" id="nbep" onclick="selNet('BEP20')">🔶 BEP20<div style="font-size:9px;font-weight:400;margin-top:2px;opacity:.6;font-family:var(--M)">BNB Chain · Free</div></div></div></div>
+      <div class="fg"><label class="fl">Amount (USDT)</label><input class="fi fi-m" type="number" id="dAmt" placeholder="100.00"/></div>
+      <div style="display:flex;gap:7px;margin-bottom:16px">
+        <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="document.getElementById('dAmt').value=50">$50</button>
+        <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="document.getElementById('dAmt').value=100">$100</button>
+        <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="document.getElementById('dAmt').value=200">$200</button>
+        <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="document.getElementById('dAmt').value=500">$500</button>
+        <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="document.getElementById('dAmt').value=1000">$1K</button>
+      </div>
+      <button class="btn b-pur b-fw" style="height:48px" onclick="depNext()">Continue →</button>
+    </div>
+    <div id="dS2" style="display:none">
+      <p class="m-sub">Send <strong id="dAmtL" style="color:var(--pur3)">$100 USDT (TRC20)</strong> to this address</p>
+      <div class="qbox" id="qg"></div>
+      <div style="text-align:center;font-size:10.5px;color:var(--tx3);margin-bottom:10px;font-family:var(--M)">Scan QR or copy address</div>
+      <div class="wbox" id="wAddr">TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE<button class="cbtn" onclick="cpWallet()">Copy</button></div>
+      <div class="info-strip">ℹ️ Only send USDT on selected network. Wrong token = permanent loss.</div>
+      <div class="fg" style="margin-top:6px">
+        <label class="fl">Transaction ID / Hash <span style="color:var(--rose)">*</span></label>
+        <input class="fi fi-m" type="text" id="dTxHash" placeholder="Paste your transaction hash here"/>
+        <div style="font-size:10px;color:var(--tx3);font-family:var(--M);margin-top:4px">⚠️ Required. Each TX ID can only be submitted once.</div>
+      </div>
+      <div style="display:flex;gap:8px"><button class="btn b-ghost b-fw" style="border-radius:14px" onclick="depBack()">← Back</button><button class="btn b-pur b-fw" style="border-radius:14px;height:46px" onclick="confirmDep()">I've Sent ✓</button></div>
+    </div>
+  </div>
+</div>
+<div class="mw" id="mWd">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="closeWd()">✕</span></div>
+    <div class="m-title">Withdraw USDT</div>
+    <p class="m-sub">Available: <strong id="wdAvl" style="color:var(--pur3)">$0.00 USDT</strong></p>
+    <div class="fg"><label class="fl">Network</label><div class="net-sel"><div class="n-opt on" id="wntrc" onclick="selWdNet('TRC20')">🌐 TRC20<div style="font-size:9px;font-weight:400;margin-top:2px;opacity:.6;font-family:var(--M)">Fee: $1 USDT</div></div><div class="n-opt off" id="wnbep" onclick="selWdNet('BEP20')">🔶 BEP20<div style="font-size:9px;font-weight:400;margin-top:2px;opacity:.6;font-family:var(--M)">Fee: $0 (Free)</div></div></div></div>
+    <div class="fg"><label class="fl">Amount</label><input class="fi fi-m" type="number" id="wdAmt" placeholder="0.00"/></div>
+    <div style="display:flex;gap:7px;margin-bottom:14px">
+      <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="wdP(25)">25%</button>
+      <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="wdP(50)">50%</button>
+      <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="wdP(75)">75%</button>
+      <button class="btn b-ghost b-sm" style="flex:1;border-radius:10px" onclick="wdP(100)">All</button>
+    </div>
+    <div class="fg"><label class="fl">Destination Address</label><input class="fi fi-m" type="text" id="wdAddr" placeholder="Your TRC20 or BEP20 wallet address"/></div>
+    <div class="warn-strip" id="wdFeeNote">⚠️ TRC20: $1 network fee will be deducted. BEP20: Free. Min $10. Review within 1–24h.</div>
+    <div style="display:flex;gap:8px"><button class="btn b-ghost b-fw" style="border-radius:14px" onclick="closeWd()">Cancel</button><button class="btn b-pur b-fw" style="border-radius:14px;height:46px" onclick="doWd()">Submit →</button></div>
+  </div>
+</div>
+<div class="mw" id="mStake">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="closeStake()">✕</span></div>
+    <div class="m-title">Confirm Investment</div>
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(147,51,234,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:18px;padding:20px;text-align:center;margin-bottom:16px;margin-top:8px">
+      <div style="font-size:48px;margin-bottom:8px" id="smEmoji">🏆</div>
+      <div style="font-family:var(--M);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--tx3);margin-bottom:4px" id="smTier">GOLD PLAN</div>
+      <div style="font-family:var(--H);font-size:40px;font-weight:800;color:var(--pur3);letter-spacing:-2px;line-height:1" id="smAmt">$500</div>
+      <div style="font-size:10px;color:var(--tx3);font-family:var(--M);margin-bottom:14px">USDT</div>
+      <div class="dv"></div>
+      <div id="smRows"></div>
+    </div>
+    <div class="fg" style="margin-bottom:10px">
+      <label class="fl">Amount to Invest (USDT)</label>
+      <input class="fi fi-m" type="number" id="stakeAmt" placeholder="Enter amount" oninput="updateStakePreview()"/>
+      <div style="font-size:10px;color:var(--tx3);font-family:var(--M);margin-top:5px" id="stakeAmtHint">Min: $500 · Available: $0.00</div>
+    </div>
+    <div class="info-strip">⚡ Funds locked for the plan duration. Principal returned at maturity.</div>
+    <div style="display:flex;gap:8px"><button class="btn b-ghost b-fw" style="border-radius:14px" onclick="closeStake()">Cancel</button><button class="btn b-pur b-fw" style="border-radius:14px;height:46px" id="stakeBtn" onclick="confirmStake()">Invest Now ✓</button></div>
+  </div>
+</div>
+<div class="mw" id="mNotif">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="document.getElementById('mNotif').classList.remove('on')">✕</span></div>
+    <div class="m-title" style="margin-bottom:16px;margin-top:8px">Notifications</div>
+    <div id="notifList"></div>
+  </div>
+</div>
+
+<!-- REFERRAL MODAL -->
+<div class="mw" id="mRef">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="document.getElementById('mRef').classList.remove('on')">✕</span></div>
+    <div style="text-align:center;padding:10px 0 6px">
+      <div style="font-size:40px;margin-bottom:8px">🎁</div>
+      <div class="m-title">Enter Referral Code</div>
+      <p class="m-sub">Have a referral code? Enter it to link your account. Your referrer earns 5% on your deposits.</p>
+    </div>
+    <div class="fg">
+      <label class="fl">Referral Code</label>
+      <input class="fi fi-m" type="text" id="refInput" placeholder="e.g. STDK-ABC12345" style="text-transform:uppercase;letter-spacing:2px"/>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn b-ghost b-fw" style="border-radius:14px" onclick="document.getElementById('mRef').classList.remove('on')">Skip</button>
+      <button class="btn b-pur b-fw" style="border-radius:14px;height:46px" onclick="doApplyReferral()">Apply Code ✓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let _rhTimer=null;
+/* ═══════════ STATE ═══════════ */
+const S={
+  role:null,user:null,plans:[],wallets:{},settings:{telegram_link:'https://t.me/stakedx_support',contact_text:'Contact Support'},
+  bal:0,inv:0,stakes:[],txs:[],
+  serverProfit:0,totalProfit:0,
+  qrCodes:{TRC20:'',BEP20:''},
+  net:'TRC20',wdNet:'TRC20',pPlan:null,balHidden:false,histFilter:'all',
+  notifs:[
+    {ic:'💰',t:'Welcome to StakeDX',b:'Your account is ready. Deposit USDT to start earning.',time:'just now',r:false},
+    {ic:'📊',t:'Market Update',b:'Crypto markets showing strong momentum today.',time:'1h ago',r:false},
+    {ic:'🎯',t:'Referral Bonus',b:'Earn 5% on every referral deposit. Share your code!',time:'2h ago',r:true},
+  ]
+};
+// Inject from Flask
+try{S.plans=JSON.parse('{{ plans|safe }}');S.wallets=JSON.parse('{{ wallets|safe }}');}catch(e){}
+
+/* ═══════════ API ═══════════ */
+async function api(path,data){
+  const opts={method:data?'POST':'GET',headers:{'Content-Type':'application/json'}};
+  if(data)opts.body=JSON.stringify(data);
+  const r=await fetch(path,opts);return r.json();
+}
+
+/* ═══════════ PRICES ═══════════ */
+const BASE=[{s:'BTC/USDT',b:67840,d:0},{s:'ETH/USDT',b:3512,d:1},{s:'TRX/USDT',b:0.1423,d:4},{s:'BNB/USDT',b:412.5,d:1},{s:'SOL/USDT',b:178.3,d:2},{s:'XRP/USDT',b:0.6821,d:4},{s:'DOGE/USDT',b:0.1634,d:4},{s:'ADA/USDT',b:0.445,d:4}];
+let prices=BASE.map(x=>({...x,price:x.b,chg:((Math.random()*4-2)).toFixed(2)}));
+const fp=p=>p.price>=1000?p.price.toLocaleString('en',{maximumFractionDigits:p.d}):p.price.toFixed(p.d);
+function renderPbar(){const el=document.getElementById('pbar');if(!el)return;el.innerHTML=prices.map(p=>`<div class="pchip"><span class="pc-s">${p.s}</span><span class="pc-p">${fp(p)}</span><span class="${+p.chg>=0?'pc-u':'pc-d'}">${+p.chg>=0?'+':''}${p.chg}%</span></div>`).join('');}
+
+// Optimised ticker: use rAF to batch DOM write, skip if tab hidden
+let _lastTick=0,_tickPaused=false;
+document.addEventListener('visibilitychange',()=>{_tickPaused=document.hidden;});
+function _tickPrices(ts){
+  if(_tickPaused){requestAnimationFrame(_tickPrices);return;}
+  if(ts-_lastTick>=2000){
+    _lastTick=ts;
+    prices=prices.map(x=>{const d=(Math.random()-.5)*x.b*.0018;const np=Math.max(x.b*.85,x.price+d);return{...x,price:np,chg:(((np-x.b)/x.b)*100).toFixed(2)};});
+    renderPbar();
+  }
+  requestAnimationFrame(_tickPrices);
+}
+requestAnimationFrame(_tickPrices);
+
+/* ═══════════ TOAST ═══════════ */
+let _tt;
+function toast(msg,type='success'){const ic={success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};const el=document.getElementById('toast');el.innerHTML=`<span>${ic[type]||'✅'}</span><span>${msg}</span>`;el.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('on'),3500);}
+
+/* ═══════════ SCREENS ═══════════ */
+function showScr(n){
+  document.getElementById('s-landing').style.display=n==='landing'?'block':'none';
+  document.getElementById('s-login').style.display=n==='login'?'block':'none';
+  var appEl=document.getElementById('s-app');
+  if(n==='app'){
+    appEl.classList.add('on');
+    appEl.style.display='flex';
+    document.body.style.overflow='hidden';
+    // Push app state so back button works
+    history.pushState({screen:'app',view:_currentView||'home'},'','#'+(_currentView||'home'));
+  } else {
+    appEl.classList.remove('on');
+    appEl.style.display='none';
+    document.body.style.overflow='';
+    if(n==='landing'){
+      history.pushState({screen:'landing'},'',window.location.pathname);
+    }
+  }
+}
+function showLogin(){showScr('login');}
+
+/* ═══════════ AUTH ═══════════ */
+async function doGoogleLogin(){
+  const errEl = document.getElementById('loginErr');
+  if(errEl) errEl.style.display='none';
+  const btn = document.getElementById('gBtn');
+  if(btn){btn.textContent='Signing in...';btn.disabled=true;}
+  try{
+    if(!window._fbAuth||!window._fbProvider||!window._fbSignInWithPopup){
+      setTimeout(doGoogleLogin,1500);return;
+    }
+    const result=await window._fbSignInWithPopup(window._fbAuth,window._fbProvider);
+    const user=result.user;
+    const email=user.email;
+    const name=user.displayName||email.split('@')[0];
+    const res=await api('/api/google_auth',{email,name});
+    if(!res.ok){
+      if(errEl){errEl.textContent=res.msg||'Login failed';errEl.style.display='block';}
+      toast(res.msg||'Login failed','error');return;
+    }
+    S.role='user'; S.user=res.user;
+    setupApp(res.user); showScr('app');
+    toast('Welcome, '+name+'! 🚀','success');
+  }catch(e){
+    if(e.code==='auth/popup-closed-by-user'){if(btn){btn.innerHTML='<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.13 0 5.94 1.08 8.15 2.84l6.08-6.08C34.32 3.09 29.43 1 24 1 14.95 1 7.23 6.39 3.67 14.09l7.08 5.5C12.54 13.37 17.81 9.5 24 9.5z"/><path fill="#4285F4" d="M46.52 24.5c0-1.56-.14-3.06-.4-4.5H24v8.52h12.62c-.55 2.94-2.2 5.43-4.69 7.1l7.22 5.61C43.38 37.16 46.52 31.27 46.52 24.5z"/><path fill="#FBBC05" d="M10.75 28.41A14.63 14.63 0 0 1 9.5 24c0-1.54.26-3.03.73-4.41l-7.08-5.5A23.95 23.95 0 0 0 0 24c0 3.86.92 7.51 2.54 10.73l8.21-6.32z"/><path fill="#34A853" d="M24 47c5.43 0 9.99-1.8 13.32-4.87l-7.22-5.61c-1.8 1.21-4.1 1.93-6.1 1.93-6.19 0-11.46-3.87-13.25-9.32l-8.21 6.32C7.23 41.61 14.95 47 24 47z"/></svg> Continue with Google';btn.disabled=false;}return;}
+    if(e.code==='auth/popup-blocked'){if(errEl){errEl.textContent='Allow popups for Google login';errEl.style.display='block';}}
+    else{if(errEl){errEl.textContent='Google sign-in failed. Please try again.';errEl.style.display='block';}}
+    toast('Google sign-in failed.','error');
+  }finally{
+    if(btn&&btn.disabled){btn.innerHTML='<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.13 0 5.94 1.08 8.15 2.84l6.08-6.08C34.32 3.09 29.43 1 24 1 14.95 1 7.23 6.39 3.67 14.09l7.08 5.5C12.54 13.37 17.81 9.5 24 9.5z"/><path fill="#4285F4" d="M46.52 24.5c0-1.56-.14-3.06-.4-4.5H24v8.52h12.62c-.55 2.94-2.2 5.43-4.69 7.1l7.22 5.61C43.38 37.16 46.52 31.27 46.52 24.5z"/><path fill="#FBBC05" d="M10.75 28.41A14.63 14.63 0 0 1 9.5 24c0-1.54.26-3.03.73-4.41l-7.08-5.5A23.95 23.95 0 0 0 0 24c0 3.86.92 7.51 2.54 10.73l8.21-6.32z"/><path fill="#34A853" d="M24 47c5.43 0 9.99-1.8 13.32-4.87l-7.22-5.61c-1.8 1.21-4.1 1.93-6.1 1.93-6.19 0-11.46-3.87-13.25-9.32l-8.21 6.32C7.23 41.61 14.95 47 24 47z"/></svg> Continue with Google';btn.disabled=false;}
+  }
+}
+function setupApp(u){
+  S.stakes=[];S.txs=[];S.serverProfit=0;S.totalProfit=0;
+  S.bal=parseFloat(u.display_balance!=null?u.display_balance:u.balance)||0;
+  S.inv=parseFloat(u.invested)||0;
+  const av=(u.name||'U')[0].toUpperCase();
+  document.getElementById('abAv').textContent=av;
+  chromeBell();
+  document.getElementById('greetAv').textContent=av;
+  const h=new Date().getHours();const g=h<12?'Good Morning':h<17?'Good Afternoon':h<21?'Good Evening':'Good Night';const em=h<12?'☀️':h<17?'⛅':h<21?'🌙':'✨';
+  document.getElementById('greetName').textContent=`${g}, ${u.name} ${em}`;
+  document.getElementById('profAv').textContent=av;
+  document.getElementById('profNm').textContent=u.name;
+  document.getElementById('profPh').textContent=u.phone||'—';
+  document.getElementById('refCode').textContent=u.ref_code||'STDK-XXXX';
+  document.getElementById('pS2').textContent=u.joined||new Date().toLocaleDateString('en',{month:'short',year:'numeric'});
+  // Show/hide apply referral card in profile
+  const arc=document.getElementById('applyRefCard');
+  if(arc)arc.style.display=(u.needs_referral||(!u.referred_by&&!u.referral_applied))?'block':'none';
+  renderLandingPlans();renderInvestPlans();
+  if(u.stakes){S.stakes=u.stakes;}
+  if(u.txs){S.txs=u.txs;}
+  navTo('home');
+  // Load settings (telegram link, contact text)
+  api('/api/settings').then(r=>{if(r&&r.ok){S.settings=r;}});
+  // Load wallets from server (admin may have updated them)
+  api('/api/wallets').then(r=>{if(r&&r.ok){S.wallets=r.wallets;}});
+  // Load QR codes from server
+  api('/api/qr_codes').then(r=>{if(r&&r.ok){S.qrCodes={TRC20:r.TRC20||'',BEP20:r.BEP20||''};}});
+  // Show referral modal for new users who haven't applied a code
+  if(u.needs_referral){setTimeout(()=>document.getElementById('mRef').classList.add('on'),1200);}
+  loadProfitToday().then(()=>startTick());
+}
+async function doLogout(){
+  await api('/api/logout',{});
+  if(window._fbSignOut&&window._fbAuth){try{await window._fbSignOut(window._fbAuth);}catch(e){}}
+  S.role=null;S.user=null;S.stakes=[];S.txs=[];S.bal=0;S.inv=0;S.serverProfit=0;S.totalProfit=0;
+  document.body.style.overflow='';
+  showScr('landing');toast('Signed out.','info');
+}
+
+/* ═══════════ NAV ═══════════ */
+let _currentView='home';
+function navTo(id,pushState=true){
+  _currentView=id;
+  chromeSync(id);
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));
+    const v=document.getElementById('v-'+id);if(v)v.classList.add('on');
+    document.querySelectorAll('.bn').forEach(el=>el.classList.remove('on'));
+    const bn=document.getElementById('bn-'+id);if(bn)bn.classList.add('on');
+    const sc=document.getElementById('appScroll');if(sc)sc.scrollTop=0;
+    if(id==='home'){if(_rhTimer)clearTimeout(_rhTimer);_rhTimer=setTimeout(renderHome,0);}
+    if(id==='plans')renderMyInv();
+    if(id==='history')renderHistory();
+    if(id==='profile')renderProfile();
+  });
+  if(pushState){
+    history.pushState({view:id,screen:'app'},'','#'+id);
+  }
+}
+
+/* ═══════════ APP CHROME: top bar · side menu · bottom nav ═══════════ */
+const CH={order:['home','invest','plans','history','profile'],titles:{invest:'Invest',plans:'My plans',history:'History',profile:'Profile'}};
+const $c=id=>document.getElementById(id);
+
+function chromeSync(id){
+  const i=CH.order.indexOf(id);
+  const nav=document.querySelector('.bnav');
+  if(nav&&i>-1)nav.style.setProperty('--i',i);
+  document.querySelectorAll('.bn').forEach(b=>{const on=b.id==='bn-'+id;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  document.querySelectorAll('.dr-it[data-view]').forEach(b=>b.classList.toggle('on',b.dataset.view===id));
+  const el=$c('abTitle');if(!el||el.dataset.k===id)return;
+  const first=!el.dataset.k;el.dataset.k=id;
+  const set=()=>{if(id==='home')el.innerHTML='Stake<em>DX</em>';else el.textContent=CH.titles[id]||'StakeDX';el.classList.remove('out');};
+  if(first){set();return;}
+  el.classList.add('out');setTimeout(set,130);
+}
+
+function chromeBell(){
+  const n=(typeof S!=='undefined'&&S.notifs)?S.notifs.filter(x=>!x.r).length:0;
+  const b=$c('abCount');if(b){b.textContent=n>9?'9+':String(n);b.hidden=!n;}
+  const p=$c('drNotifN');if(p){p.textContent=n>9?'9+':String(n);p.hidden=!n;}
+}
+
+function chromeFillDrawer(){
+  const u=(typeof S!=='undefined'&&S.user)||{};
+  const name=u.name||'Investor';
+  $c('drName').textContent=name;
+  $c('drMail').textContent=u.email||u.phone||'';
+  $c('drAv').textContent=name[0].toUpperCase();
+  const hidden=typeof S!=='undefined'&&S.balHidden;
+  const bal=typeof S!=='undefined'?(parseFloat(S.bal)||0):0;
+  $c('drBal').textContent=hidden?'••••':'$'+bal.toFixed(2);
+  chromeBell();
+}
+
+let _drFocus=null;
+function isDrawerOpen(){const d=$c('drawer');return !!d&&d.classList.contains('on');}
+function openDrawer(){
+  if(isDrawerOpen())return;
+  chromeFillDrawer();
+  _drFocus=document.activeElement;
+  const d=$c('drawer');
+  $c('drOv').classList.add('on');d.classList.add('on');d.setAttribute('aria-hidden','false');
+  $c('menuBtn').setAttribute('aria-expanded','true');
+  history.pushState({screen:'app',view:_currentView,modal:'drawer'},'','#menu');
+  setTimeout(()=>{const x=$c('drClose');if(x)x.focus({preventScroll:true});},60);
+}
+function closeDrawer(){
+  if(!isDrawerOpen())return;
+  const d=$c('drawer');
+  $c('drOv').classList.remove('on');d.classList.remove('on','drag');d.style.transform='';d.setAttribute('aria-hidden','true');
+  $c('menuBtn').setAttribute('aria-expanded','false');
+  if(_drFocus&&_drFocus.focus){try{_drFocus.focus({preventScroll:true});}catch(e){}}
+}
+function drGo(a){
+  closeDrawer();
+  setTimeout(()=>{
+    if(CH.order.includes(a))navTo(a);
+    else if(a==='dep')openDep();
+    else if(a==='wd')openWd();
+    else if(a==='notif')openNotifs();
+    else if(a==='help')openContact();
+    else if(a==='out')doLogout();
+    else if(a==='ref'){navTo('profile');setTimeout(()=>{const el=document.querySelector('.ref-card');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},380);}
+  },190);
+}
+
+document.addEventListener('keydown',e=>{
+  if(!isDrawerOpen())return;
+  if(e.key==='Escape'){closeDrawer();return;}
+  if(e.key==='Tab'){
+    const f=[...$c('drawer').querySelectorAll('button')].filter(b=>b.offsetParent!==null);
+    if(!f.length)return;const a=f[0],z=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}
+    else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}
+  }
+});
+
+/* swipe left on the menu to close */
+(function(){
+  const d=$c('drawer'),ov=$c('drOv');if(!d)return;
+  let sx=0,sy=0,dx=0,drag=false,lock=null;
+  d.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;dx=0;drag=true;lock=null;},{passive:true});
+  d.addEventListener('touchmove',e=>{
+    if(!drag)return;const t=e.touches[0],mx=t.clientX-sx,my=t.clientY-sy;
+    if(lock===null&&(Math.abs(mx)>8||Math.abs(my)>8))lock=Math.abs(mx)>Math.abs(my)?'x':'y';
+    if(lock!=='x')return;
+    dx=Math.min(0,mx);d.classList.add('drag');d.style.transform='translateX('+dx+'px)';ov.style.opacity=String(Math.max(0,1+dx/d.offsetWidth));
+  },{passive:true});
+  d.addEventListener('touchend',()=>{
+    if(!drag)return;drag=false;d.classList.remove('drag');ov.style.opacity='';d.style.transform='';
+    if(lock==='x'&&dx<-70)closeDrawer();
+  });
+})();
+
+/* top bar shadow + support button hide on scroll */
+(function(){
+  const sc=$c('appScroll'),bar=$c('appbar'),fl=$c('contactFloat');if(!sc||!bar)return;
+  let last=0,tick=false;
+  sc.addEventListener('scroll',()=>{
+    if(tick)return;tick=true;
+    requestAnimationFrame(()=>{
+      const y=sc.scrollTop;bar.classList.toggle('scrolled',y>4);
+      if(fl){const d=y-last;if(d>8&&y>120)fl.classList.add('hide');else if(d<-8||y<=120)fl.classList.remove('hide');}
+      if(Math.abs(y-last)>8)last=y;tick=false;
+    });
+  },{passive:true});
+})();
+
+/* light haptic tap on tab change (where supported) */
+(function(){const n=document.querySelector('.bnav');if(n)n.addEventListener('click',()=>{if(navigator.vibrate)navigator.vibrate(6);});})();
+
+chromeSync('home');chromeBell();
+
+/* ═══════════ BACK BUTTON HANDLER ═══════════ */
+window.addEventListener('popstate',function(e){
+  if(isDrawerOpen()){closeDrawer();history.pushState({view:_currentView,screen:'app'},'','#'+_currentView);return;}
+  // If any modal is open, close it first
+  const openModals=document.querySelectorAll('.mw.on');
+  if(openModals.length>0){
+    openModals.forEach(m=>m.classList.remove('on'));
+    history.pushState({view:_currentView,screen:'app'},'','#'+_currentView);
+    return;
+  }
+  const state=e.state;
+  if(!state){
+    // No state — we're at the very beginning of history
+    // If user is on app, go to landing instead of closing site
+    const appEl=document.getElementById('s-app');
+    if(appEl&&appEl.classList.contains('on')){
+      // push a dummy state so next back goes to landing
+      showScr('landing');
+      history.pushState(null,'',window.location.pathname);
+    }
+    return;
+  }
+  if(state.screen==='app'){
+    const appEl=document.getElementById('s-app');
+    if(appEl&&appEl.classList.contains('on')){
+      // Navigate to previous view without pushing new state
+      if(state.view&&state.view!==_currentView){
+        navTo(state.view,false);
+      }
+    } else {
+      // Was on landing/login, go back to app
+      showScr('app');
+    }
+  } else if(state.screen==='landing'){
+    showScr('landing');
+  }
+});
+
+/* ═══════════ RENDER ═══════════ */
+function renderHome(){
+  const sh=v=>S.balHidden?'••••':v;
+  document.getElementById('wcBal').textContent=sh(S.bal.toFixed(2));
+  document.getElementById('wcInv').textContent=sh('$'+S.inv.toFixed(2));
+  // Total Earnings = all-time profit from server (updates on each API call)
+  document.getElementById('wcEarn').textContent=sh('$'+(S.totalProfit||0).toFixed(2));
+  document.getElementById('portV').textContent='$'+(S.bal+S.inv).toFixed(2);
+  document.getElementById('pS3').textContent='$'+S.inv.toFixed(2);
+  document.getElementById('pS4').textContent='$'+S.bal.toFixed(2);
+  document.getElementById('pS1').textContent=S.stakes.filter(s=>s.status==='active').length;
+  renderDonut();renderChart();renderQA();renderHomeStakes();renderHomeTxs();
+}
+function toggleBal(){S.balHidden=!S.balHidden;renderHome();}
+function renderChart(){const el=document.getElementById('wcChart');if(!el)return;const d=[0.2,0.3,0.5,0.4,0.7,0.6,S.stakes.length?0.85:0.1];el.innerHTML=d.map(v=>`<div class="wc-bar" style="height:${v*100}%;opacity:${0.4+v*0.6}"></div>`).join('');}
+const QA=[{ic:'💳',lbl:'Deposit',bg:'rgba(0,229,160,0.12)',fn:'openDep()'},{ic:'⚡',lbl:'Invest',bg:'rgba(124,58,237,0.15)',fn:"navTo('invest')"},{ic:'🗂',lbl:'Plans',bg:'rgba(245,158,11,0.12)',fn:"navTo('plans')"},{ic:'🕐',lbl:'History',bg:'rgba(6,182,212,0.12)',fn:"navTo('history')"},{ic:'👥',lbl:'Refer',bg:'rgba(124,58,237,0.12)',fn:"navTo('profile')"},{ic:'⬆',lbl:'Withdraw',bg:'rgba(249,115,22,0.12)',fn:'openWd()'}];
+function renderQA(){document.getElementById('qaGrid').innerHTML=QA.map(q=>`<div class="qa-item" onclick="${q.fn}"><div class="qa-ic" style="background:${q.bg}">${q.ic}</div><span class="qa-lbl">${q.lbl}</span></div>`).join('');}
+function renderDonut(){
+  const canvas=document.getElementById('donutC');if(!canvas)return;
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,100,100);
+  const active=S.stakes.length,done=0;
+  const segs=active>0?[{v:active,c:'#7c3aed'},{v:Math.max(done,0),c:'#06b6d4'},{v:0,c:'#f59e0b'}]:[{v:1,c:'rgba(255,255,255,0.1)'}];
+  let s=-Math.PI/2;
+  segs.forEach(sg=>{const a=(sg.v/Math.max(active+done+1,1))*Math.PI*2||Math.PI*2;ctx.beginPath();ctx.arc(50,50,38,s,s+a);ctx.lineWidth=12;ctx.strokeStyle=sg.c;ctx.lineCap='round';ctx.stroke();s+=a;});
+  document.getElementById('donutV').textContent=active;document.getElementById('legA').textContent=active;document.getElementById('legD').textContent=done;document.getElementById('legW').textContent=0;
+}
+function renderHomeStakes(){
+  const el=document.getElementById('homeStakes');
+  if(!S.stakes.length){el.innerHTML=`<div style="background:rgba(255,255,255,0.02);border:1.5px dashed var(--rim);border-radius:14px;padding:28px;text-align:center"><div style="font-size:28px;margin-bottom:10px;opacity:.4">⚡</div><div style="font-size:13px;color:var(--tx3);margin-bottom:10px">No active investments yet</div><button class="btn b-pur b-sm" onclick="navTo('invest')">Start investing →</button></div>`;return;}
+  el.innerHTML=S.stakes.map(s=>{const p=S.plans.find(x=>x.id===s.plan_id)||S.plans[2]||{};const pct=Math.min(100,((p.period-s.days_left)/(p.period||30))*100);return`<div class="inv-card"><div class="inv-hd"><div class="inv-ic" style="background:rgba(124,58,237,0.15)">${s.emoji||'⬡'}</div><div><div class="inv-nm">${s.plan} Plan</div><div class="inv-sb">${s.start}</div></div><div class="inv-rt" style="color:${p.color||'var(--pur3)'}">${s.daily}%</div></div><div class="stat-row"><div class="stat-cell"><div class="stat-l">Invested</div><div class="stat-v">$${s.amount}</div></div><div class="stat-cell"><div class="stat-l">Daily</div><div class="stat-v" style="color:var(--lime)">$${s.daily_earn.toFixed(2)}</div></div><div class="stat-cell"><div class="stat-l">${s.days_left}d Left</div><div class="stat-v">${pct.toFixed(0)}%</div></div></div><div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${p.bg||'linear-gradient(90deg,var(--pur),var(--pur2))'}"></div></div></div>`}).join('');}
+function renderHomeTxs(){
+  const el=document.getElementById('homeTxs');
+  if(!S.txs.length){el.innerHTML=`<div style="text-align:center;padding:24px 0;color:var(--tx3);font-size:13px">No transactions yet</div>`;return;}
+  const ic={deposit:'💳',withdrawal:'📤',stake:'⚡',earnings:'📈'};
+  el.innerHTML=S.txs.slice(0,3).map(tx=>`<div class="tx-item"><div class="tx-ic">${ic[tx.type]||'💱'}</div><div class="tx-body"><div class="tx-t">${tx.type==='deposit'?'Wallet Deposit':tx.type==='withdrawal'?'Withdrawal':tx.type==='stake'?'Investment':'Earnings'}</div><div class="tx-m">🕐 ${tx.date}</div></div><div><div class="tx-amt" style="color:${tx.type==='withdrawal'?'var(--rose)':'var(--lime)'}">${tx.type==='withdrawal'?'-':'+'}$${tx.amount.toFixed(2)}</div><div class="tx-st ${tx.status==='pending'?'proc':'comp'}">${tx.status==='pending'?'Processing':'Completed'}</div></div></div>`).join('');}
+
+function renderLandingPlans(){
+  const el=document.getElementById('lPlans');if(!el)return;
+  el.innerHTML=S.plans.map(p=>{const profit=(p.daily*(p.min||100)/100*p.period).toFixed(2);return`<div class="lp-card" onclick="showLogin()"><div class="lp-banner" style="background:${p.bg||'linear-gradient(135deg,#4c1d95,#7c3aed)'}"><div class="lp-shield">${p.emoji||'⬡'}</div><div class="lp-info"><div class="lp-name">${p.label} Plan</div><div class="lp-brand">StakeDX</div></div><div class="lp-tag" style="background:rgba(0,0,0,0.3);color:#fff">${p.daily}% daily</div></div><div class="lp-body"><div class="lp-nr"><div style="display:flex;align-items:center;gap:9px"><div class="lp-ic" style="background:rgba(124,58,237,0.2)">${p.emoji||'⬡'}</div><div><div class="lp-nm">${p.label}</div><div class="lp-ds">${p.desc||''}</div></div></div><div style="text-align:right"><div class="lp-rb" style="color:${p.color||'var(--pur3)'}">${p.daily}%</div><div class="lp-dl">daily</div></div></div><div class="lp-row"><div class="lp-cell"><div class="lp-cl">Investment</div><div class="lp-cv">$${p.min||100}+</div></div><div class="lp-cell"><div class="lp-cl">Duration</div><div class="lp-cv">${p.period} Days</div></div></div><div class="lp-pr"><span>Total profit at max</span><span style="font-weight:700;color:${p.color||'var(--pur3)'}">~${(p.daily*p.period).toFixed(0)}%</span></div><button class="btn b-fw" style="background:${p.bg||'linear-gradient(135deg,#7c3aed,#9333ea)'};color:#fff;height:44px;font-size:13px;border-radius:14px" onclick="showLogin()">Invest in ${p.label}</button></div></div>`}).join('');}
+function renderInvestPlans(){
+  const el=document.getElementById('investPlans');if(!el)return;
+  el.innerHTML=S.plans.map(p=>`<div class="plan-card"><div class="pb" style="background:${p.bg||'linear-gradient(135deg,#4c1d95,#7c3aed)'}"><div class="pb-sh">${p.emoji||'⬡'}</div><div class="pb-r"><div class="pb-nm">${p.label} Plan</div><div class="pb-br">StakeDX</div></div><div class="pb-tag" style="background:rgba(0,0,0,0.35);color:#fff">${p.daily}% daily</div></div><div class="pb-body"><div class="pb-nr"><div style="display:flex;align-items:center;gap:10px"><div class="pb-ic" style="background:rgba(124,58,237,0.2)">${p.emoji||'⬡'}</div><div><div class="pb-nm2">${p.label}</div><div class="pb-ds">${p.desc||''}</div></div></div><div style="text-align:right"><div class="pb-rb" style="color:${p.color||'var(--pur3)'}">${p.daily}%</div><div class="pb-dl">daily</div></div></div><div class="pb-ig"><div class="pb-ic2"><div class="pb-il">📈 Investment</div><div class="pb-iv">$${p.min||100}+</div></div><div class="pb-ic2"><div class="pb-il">🕐 Duration</div><div class="pb-iv">${p.period} Days</div></div></div><div class="pb-pr"><span>Total profit at max</span><span style="font-weight:700;color:${p.color||'var(--pur3)'}">~${(p.daily*p.period).toFixed(0)}%</span></div><button class="btn b-fw" style="background:${p.bg||'linear-gradient(135deg,#7c3aed,#9333ea)'};color:#fff;height:46px;font-size:14px;border-radius:14px" onclick="openStake(${p.id})">Invest in ${p.label}</button></div></div>`).join('');}
+function renderMyInv(){
+  const el=document.getElementById('myInvContent');
+  if(!S.stakes.length){el.innerHTML=`<div class="empty-state"><div class="empty-ic" style="font-size:40px;margin-bottom:12px;opacity:.5">🗂</div><div style="font-family:var(--H);font-size:16px;font-weight:700;margin-bottom:6px">No Active Investments</div><div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:16px">Invest in a plan to start earning daily returns.</div><button class="btn b-pur b-sm" onclick="navTo('invest')">Browse Plans →</button></div>`;return;}
+  el.innerHTML=S.stakes.map(s=>{const p=S.plans.find(x=>x.id===s.plan_id)||S.plans[2]||{};const pct=Math.min(100,((p.period-s.days_left)/(p.period||30))*100);return`<div class="inv-card" style="margin-bottom:12px"><div class="inv-hd"><div class="inv-ic" style="background:rgba(124,58,237,0.15);font-size:20px">${s.emoji||'⬡'}</div><div><div class="inv-nm" style="font-size:16px">${s.plan} Plan</div><div class="inv-sb">Active · Started ${s.start}</div></div><div class="inv-rt" style="color:${p.color||'var(--pur3)'};font-size:20px">${s.daily}%<div style="font-size:10px;font-family:var(--M);color:var(--tx3)">daily</div></div></div><div class="stat-row"><div class="stat-cell"><div class="stat-l">Principal</div><div class="stat-v">$${s.amount}</div></div><div class="stat-cell"><div class="stat-l">Daily Earn</div><div class="stat-v" style="color:var(--lime)">$${s.daily_earn.toFixed(2)}</div></div><div class="stat-cell"><div class="stat-l">Days Left</div><div class="stat-v">${s.days_left}d</div></div></div><div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${p.bg||'linear-gradient(90deg,var(--pur),var(--pur2))'}"></div></div></div>`}).join('');}
+let histFilter='all';
+function setHTab(f,el){histFilter=f;document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));el.classList.add('on');renderHistory();}
+function renderHistory(){
+  const total=S.txs.length,pend=S.txs.filter(t=>t.status==='pending').length;
+  document.getElementById('histSub').textContent=`${total} total · ${pend} pending`;
+  const dep=S.txs.filter(t=>t.type==='deposit').reduce((a,t)=>a+t.amount,0);
+  const wd=S.txs.filter(t=>t.type==='withdrawal').reduce((a,t)=>a+t.amount,0);
+  document.getElementById('hbDep').textContent='$'+dep.toFixed(0);
+  document.getElementById('hbWd').textContent='$'+wd.toFixed(0);
+  const filtered=histFilter==='all'?S.txs:S.txs.filter(t=>t.type===histFilter);
+  const el=document.getElementById('histList');
+  if(!filtered.length){el.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--tx3)"><div style="font-size:28px;margin-bottom:10px;opacity:.4">📭</div><div>No transactions found</div></div>`;return;}
+  const ic={deposit:'💳',withdrawal:'📤',stake:'⚡',earnings:'📈'};
+  el.innerHTML=filtered.map(tx=>`<div class="hist-tx"><div class="htx-top"><div class="htx-ic">${ic[tx.type]||'💱'}</div><div><div class="htx-t">${tx.type==='deposit'?'Deposit':tx.type==='withdrawal'?'Withdrawal':tx.type==='stake'?'Investment':'Earnings'}</div><div><span class="htx-proc">${tx.status==='pending'?'PROCESSING...':tx.status.toUpperCase()}</span><span class="htx-via">via ${tx.network||'—'}</span></div></div><div style="margin-left:auto;text-align:right"><div class="htx-amt" style="color:${tx.type==='withdrawal'?'var(--rose)':'var(--lime)'}">${tx.type==='withdrawal'?'-':'+'}$${tx.amount.toFixed(2)}</div><div class="htx-id">#${(tx.id||'000000').slice(-6)}</div></div></div>${tx.tx_hash?`<div class="htx-ref"><div class="htx-rl">Transaction Hash</div><div class="htx-rv" style="word-break:break-all">${tx.tx_hash}</div></div>`:tx.ref?`<div class="htx-ref"><div class="htx-rl">Reference / Note</div><div class="htx-rv">${tx.ref}</div></div>`:''}<div class="htx-time">🕐 ${tx.date}</div></div>`).join('');}
+function renderProfile(){document.getElementById('pS1').textContent=S.stakes.length;document.getElementById('pS3').textContent='$'+S.inv.toFixed(2);document.getElementById('pS4').textContent='$'+S.bal.toFixed(2);const e=document.getElementById('invHistE');const l=document.getElementById('invHistL');if(!S.stakes.length){e.style.display='block';l.innerHTML='';}else{e.style.display='none';l.innerHTML=S.stakes.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--rim)"><div style="font-size:20px">${s.emoji||'⬡'}</div><div style="flex:1"><div style="font-size:13px;font-weight:700;font-family:var(--H)">${s.plan} Plan</div><div style="font-size:10.5px;color:var(--tx2);font-family:var(--M)">${s.start} · ${s.days_left}d left</div></div><div style="text-align:right"><div style="font-family:var(--M);font-size:13px;color:var(--lime)">$${s.daily_earn.toFixed(2)}/day</div><div style="font-size:10px;color:var(--tx3);font-family:var(--M)">$${s.amount} locked</div></div></div>`).join('');}}
+
+/* ═══════════ PROFIT / EARNINGS ═══════════ */
+// Loads total profit from server — no live ticker, no per-second animation
+async function loadProfitToday(){
+  try{
+    const r=await api('/api/profit_today');
+    if(r.ok){
+      S.serverProfit=parseFloat(r.today)||0;
+      S.totalProfit=parseFloat(r.total_profit)||0;
+      if(r.display_balance!=null){S.bal=parseFloat(r.display_balance)||S.bal;}
+      renderHome();
+    }
+  }catch(e){}
+}
+// startTick is a no-op — live ticker removed per user request
+function startTick(){ }
+
+/* ═══════════ DEPOSIT ═══════════ */
+function openDep(){document.getElementById('mDep').classList.add('on');history.pushState({screen:'app',view:_currentView,modal:'mDep'},'','#dep');}
+function closeDep(){document.getElementById('mDep').classList.remove('on');}
+function selNet(n){S.net=n;document.getElementById('ntrc').className='n-opt '+(n==='TRC20'?'on':'off');document.getElementById('nbep').className='n-opt '+(n==='BEP20'?'on':'off');}
+function selWdNet(n){S.wdNet=n;document.getElementById('wntrc').className='n-opt '+(n==='TRC20'?'on':'off');document.getElementById('wnbep').className='n-opt '+(n==='BEP20'?'on':'off');const fee=n==='TRC20'?1:0;document.getElementById('wdFeeNote').textContent=`⚠️ ${n} network fee: $${fee} USDT will be deducted. Min $10. Review within 1–24h.`;}
+function depNext(){const amt=parseFloat(document.getElementById('dAmt').value);if(!amt||amt<10){toast('Minimum $10 USDT.','error');return;}document.getElementById('dS1').style.display='none';document.getElementById('dS2').style.display='block';document.getElementById('mDepT').textContent='Send to Address';document.getElementById('dAmtL').textContent=`$${amt} USDT (${S.net})`;const addr=S.wallets[S.net]||S.wallets['TRC20']||'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE';document.getElementById('wAddr').innerHTML=addr+`<button class="cbtn" onclick="cpWallet()">Copy</button>`;buildQR(addr);}
+function depBack(){document.getElementById('dS1').style.display='block';document.getElementById('dS2').style.display='none';document.getElementById('mDepT').textContent='Deposit USDT';}
+function cpWallet(){cpTxt(S.wallets[S.net]||'');}
+async function confirmDep(){
+  const amt=parseFloat(document.getElementById('dAmt').value);
+  const tx_hash=document.getElementById('dTxHash').value.trim();
+  if(!tx_hash){toast('Please enter your Transaction ID / Hash.','error');return;}
+  const res=await api('/api/deposit',{amount:amt,network:S.net,tx_hash});
+  if(!res.ok){toast(res.msg||'Error','error');return;}
+  S.txs.unshift(res.tx);closeDep();depBack();
+  document.getElementById('dAmt').value='';
+  document.getElementById('dTxHash').value='';
+  renderHome();toast(`Deposit $${amt} USDT submitted! 🎉`,'info');
+}
+function buildQR(addr){
+  const el=document.getElementById('qg');
+  const net=S.net||'TRC20';
+  const qrImg=S.qrCodes[net];
+  if(qrImg){
+    // Show admin-uploaded real QR image
+    el.style.cssText='background:#fff;border-radius:12px;padding:6px;width:120px;height:120px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;overflow:hidden';
+    el.innerHTML=`<img src="${qrImg}" style="width:108px;height:108px;object-fit:contain;border-radius:6px" alt="QR Code"/>`;
+  } else {
+    // Fallback: show placeholder with message
+    el.style.cssText='background:#1a1a2e;border-radius:12px;padding:10px;width:120px;height:120px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px';
+    el.innerHTML=`<div style="font-size:28px">📷</div><div style="font-size:9px;color:#888;text-align:center;font-family:monospace">QR not set<br/>Use address below</div>`;
+  }
+}
+
+/* ═══════════ WITHDRAW ═══════════ */
+function openWd(){
+  S.wdNet='TRC20';
+  document.getElementById('mWd').classList.add('on');
+  document.getElementById('wdAvl').textContent='$'+S.bal.toFixed(2)+' USDT';
+  document.getElementById('wntrc').className='n-opt on';
+  document.getElementById('wnbep').className='n-opt off';
+  document.getElementById('wdFeeNote').textContent='⚠️ TRC20 network fee: $1 USDT will be deducted. Min $10. Review within 1–24h.';
+  history.pushState({screen:'app',view:_currentView,modal:'mWd'},'','#withdraw');
+}
+function closeWd(){document.getElementById('mWd').classList.remove('on');}
+function wdP(p){document.getElementById('wdAmt').value=(S.bal*p/100).toFixed(2);}
+async function doWd(){
+  const amt=parseFloat(document.getElementById('wdAmt').value);
+  const addr=document.getElementById('wdAddr').value.trim();
+  const fee=S.wdNet==='TRC20'?1:0;
+  if(!amt||amt<10){toast('Minimum withdrawal is $10 USDT.','error');return;}
+  if(!addr||addr.length<10){toast('Please enter a valid wallet address.','error');return;}
+  const needed=amt+fee;
+  if(needed>S.bal){toast(`Need $${needed.toFixed(2)} (incl. $${fee} fee). Balance: $${S.bal.toFixed(2)}`,'error');return;}
+  const res=await api('/api/withdraw',{amount:amt,address:addr,network:S.wdNet||'TRC20'});
+  if(!res.ok){toast(res.msg||'Withdrawal failed','error');return;}
+  S.bal=parseFloat(res.balance!=null?res.balance:S.bal-needed)||0;
+  S.serverProfit=0;
+  if(res.tx)S.txs.unshift(res.tx);
+  closeWd();document.getElementById('wdAmt').value='';document.getElementById('wdAddr').value='';
+  await loadProfitToday();
+  startTick();
+  renderHome();toast('Withdrawal request submitted! ✓','info');
+}
+
+/* ═══════════ STAKE ═══════════ */
+function openStake(id){
+  const p=S.plans.find(x=>x.id===id);if(!p)return;S.pPlan=p;
+  document.getElementById('smEmoji').textContent=p.emoji||'⬡';
+  document.getElementById('smTier').textContent=p.label.toUpperCase()+' PLAN';
+  document.getElementById('smAmt').textContent='$'+p.min;
+  document.getElementById('stakeBtn').style.background=p.bg||'linear-gradient(135deg,#7c3aed,#9333ea)';
+  document.getElementById('stakeAmt').value=p.min;
+  document.getElementById('stakeAmtHint').textContent=`Min: $${p.min} · Max: $${p.max===100000?'Unlimited':p.max} · Available: $${S.bal.toFixed(2)}`;
+  document.getElementById('smRows').innerHTML=[['Daily Return',`<span style="color:${p.color||'var(--pur3)'}">${p.daily}%</span>`],['Lock Period',`${p.period} days`],['Daily Earn (min)',`<span style="color:var(--lime)">$${(p.min*p.daily/100).toFixed(2)}</span>`],['Total Profit (min)',`<span style="color:${p.color||'var(--pur3)'}">+$${(p.min*p.daily/100*p.period).toFixed(2)}</span>`]].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:12px;color:var(--tx2)">${k}</span><span style="font-family:var(--M);font-size:12px;font-weight:500">${v}</span></div>`).join('');
+  document.getElementById('mStake').classList.add('on');
+  history.pushState({screen:'app',view:_currentView,modal:'mStake'},'','#invest');
+}
+function updateStakePreview(){
+  const p=S.pPlan;if(!p)return;
+  const amt=parseFloat(document.getElementById('stakeAmt').value)||p.min;
+  document.getElementById('smAmt').textContent='$'+amt;
+  const daily=amt*p.daily/100;
+  const total=daily*p.period;
+  document.getElementById('smRows').innerHTML=[['Daily Return',`<span style="color:${p.color||'var(--pur3)'}">${p.daily}%</span>`],['Lock Period',`${p.period} days`],['Daily Earn',`<span style="color:var(--lime)">$${daily.toFixed(2)}</span>`],['Total Profit',`<span style="color:${p.color||'var(--pur3)'}">+$${total.toFixed(2)}</span>`]].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:12px;color:var(--tx2)">${k}</span><span style="font-family:var(--M);font-size:12px;font-weight:500">${v}</span></div>`).join('');
+}
+function closeStake(){document.getElementById('mStake').classList.remove('on');}
+async function confirmStake(){
+  const p=S.pPlan;if(!p)return;
+  const amt=parseFloat(document.getElementById('stakeAmt').value)||p.min;
+  if(amt<p.min){toast(`Minimum investment for ${p.label} is $${p.min}.`,'error');return;}
+  if(p.max&&p.max<100000&&amt>p.max){toast(`Maximum for ${p.label} is $${p.max}.`,'error');return;}
+  if(S.bal<amt){toast(`Need $${amt} to invest. Current balance: $${S.bal.toFixed(2)}.`,'error');return;}
+  const res=await api('/api/stake',{plan_id:p.id,amount:amt});
+  if(!res.ok){toast(res.msg||'Investment failed','error');return;}
+  S.bal=parseFloat(res.balance!=null?res.balance:S.bal-amt)||0;
+  S.inv+=amt;
+  S.serverProfit=0;
+  if(res.stake)S.stakes.push(res.stake);
+  S.txs.unshift({type:'stake',amount:amt,date:new Date().toLocaleString(),status:'active',network:'—',id:'TX'+Date.now()});
+  closeStake();
+  await loadProfitToday();
+  startTick();
+  renderHome();
+  toast(`✅ Invested $${amt} in ${p.label} Plan!`,'success');navTo('home');
+}
+
+/* ═══════════ NOTIFS ═══════════ */
+function openNotifs(){chromeBell();document.getElementById('notifList').innerHTML=S.notifs.map((n,i)=>`<div style="display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="S.notifs[${i}].r=true;openNotifs()"><div style="width:36px;height:36px;border-radius:10px;background:${n.r?'rgba(255,255,255,0.06)':'rgba(124,58,237,0.15)'};border:1px solid ${n.r?'var(--rim)':'rgba(124,58,237,0.25)'};display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">${n.ic}</div><div style="flex:1"><div style="font-size:13px;font-weight:${n.r?400:700};font-family:var(--H);margin-bottom:2px">${n.t}</div><div style="font-size:11.5px;color:var(--tx2);line-height:1.5;margin-bottom:3px">${n.b}</div><div style="font-size:9.5px;color:var(--tx3);font-family:var(--M)">${n.time}</div></div>${!n.r?'<div style="width:8px;height:8px;border-radius:50%;background:var(--pur3);margin-top:4px;flex-shrink:0;box-shadow:0 0 7px var(--pur3)"></div>':''}</div>`).join('');document.getElementById('mNotif').classList.add('on');history.pushState({screen:'app',view:_currentView,modal:'mNotif'},'','#notifs');}
+
+/* ═══════════ CONTACT ═══════════ */
+function openContact(){
+  const link=S.settings&&S.settings.telegram_link?S.settings.telegram_link:'https://t.me/stakedx_support';
+  window.open(link,'_blank');
+}
+
+/* ═══════════ REFERRAL ═══════════ */
+async function doApplyReferral(){
+  const code=document.getElementById('refInput').value.trim().toUpperCase();
+  if(!code){toast('Please enter a referral code','error');return;}
+  const res=await api('/api/apply_referral',{code});
+  if(!res.ok){toast(res.msg||'Invalid code','error');return;}
+  document.getElementById('mRef').classList.remove('on');
+  document.getElementById('applyRefCard').style.display='none';
+  toast(res.msg||'Referral applied! 🎉','success');
+}
+
+/* ═══════════ CALC ═══════════ */
+function calcR(){const amt=parseFloat(document.getElementById('cAmt').value)||0;const idx=parseInt(document.getElementById('cPlan').value);const p=S.plans[isNaN(idx)?3:idx];if(!p)return;const daily=amt*p.daily/100,total=daily*p.period;document.getElementById('cRes').innerHTML=[{l:'Daily Earn',v:'$'+daily.toFixed(2)},{l:'Total Profit',v:'+$'+total.toFixed(2)},{l:'Total Return',v:'$'+(amt+total).toFixed(2)},{l:'ROI',v:((total/amt)*100||0).toFixed(0)+'%'},{l:'Duration',v:p.period+'d'},{l:'Yield',v:(p.daily*p.period).toFixed(0)+'%'}].map(r=>`<div class="cc"><div class="cc-l">${r.l}</div><div class="cc-v">${r.v}</div></div>`).join('');}
+
+/* ═══════════ COPY ═══════════ */
+function cpTxt(txt,btn){navigator.clipboard?.writeText(txt).catch(()=>{});if(btn){const o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent=o,2000);}toast('Copied!','success');}
+
+/* ═══════════ INIT ═══════════ */
+window.onload=async function(){
+  // Set base history state so back never closes the site
+  history.replaceState({screen:'landing'},'',window.location.pathname);
+  renderPbar();renderLandingPlans();calcR();
+  // Load wallets even before login (for landing page)
+  api('/api/wallets').then(r=>{if(r&&r.ok)S.wallets=r.wallets;});
+  try{
+    const r=await api('/api/me');
+    if(r.ok){
+      S.role=r.role;
+      if(r.role==='admin'){showScr('app');setupApp({name:'Admin',email:'admin@stakedx.com',ref_code:'ADMIN',balance:0,display_balance:0,invested:0});}
+      else if(r.user){S.user=r.user;setupApp(r.user);showScr('app');}
+      else{showScr('landing');}
+    }else{showScr('landing');}
+  }catch(e){showScr('landing');}
+  const ldr=document.getElementById('loader');ldr.style.transition='opacity .2s';ldr.style.opacity='0';setTimeout(()=>ldr.style.display='none',200);
+};
+</script>
+</body>
+</html>

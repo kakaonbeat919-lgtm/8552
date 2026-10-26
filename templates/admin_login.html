@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StakeDX — Admin Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#04060f;--pur:#7c3aed;--pur2:#9333ea;--pur3:#a855f7;--tx:#f0f0ff;--tx2:rgba(240,240,255,.55);--tx3:rgba(240,240,255,.28);--rim:rgba(255,255,255,.07);--rim2:rgba(255,255,255,.12);--rose:#ef4444;--H:'Syne',sans-serif;--M:'DM Mono',monospace;--B:'DM Sans',sans-serif}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--B);display:flex;align-items:center;justify-content:center;padding:20px}
+.bg-grad{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(124,58,237,.12),transparent 60%),var(--bg)}
+.card{position:relative;z-index:1;width:100%;max-width:360px;background:rgba(5,8,18,.98);border:1px solid rgba(124,58,237,.2);border-radius:24px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:6px}
+.mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--pur),var(--pur2));display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:20px;font-weight:800;color:#fff;box-shadow:0 0 24px rgba(124,58,237,.4)}
+.brand{font-family:var(--H);font-size:24px;font-weight:800}
+.brand em{color:var(--pur3);font-style:normal}
+.sub{text-align:center;font-size:12px;color:var(--tx3);margin-bottom:28px;font-family:var(--M);letter-spacing:.5px;text-transform:uppercase}
+.fl{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);margin-bottom:6px;font-family:var(--M)}
+.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--rim2);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--tx);font-family:var(--M);outline:none;transition:all .2s;margin-bottom:16px}
+.fi:focus{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.06);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.fi::placeholder{color:var(--tx3)}
+.btn{width:100%;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--pur),var(--pur2));border:none;color:#fff;font-size:14px;font-weight:700;font-family:var(--H);cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(124,58,237,.35)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(124,58,237,.5)}
+.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--rose);margin-bottom:14px;display:none}
+.back{text-align:center;margin-top:16px;font-size:12px;color:var(--tx3);}
+.back a{color:var(--pur3);text-decoration:none;font-weight:600}
+.shield{text-align:center;margin-bottom:24px;font-size:36px}
+</style>
+</head>
+<body>
+<div class="bg-grad"></div>
+<div class="card">
+  <div class="shield">🛡️</div>
+  <div class="logo">
+    <div class="mark">S</div>
+    <span class="brand">Stake<em>DX</em></span>
+  </div>
+  <div class="sub">Admin Access Only</div>
+  <div class="err" id="err">Invalid credentials. Please try again.</div>
+  <label class="fl">Admin Password</label>
+  <input class="fi" type="password" id="pwd" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
+  <button class="btn" onclick="doLogin()">🔐 Access Admin Panel</button>
+  <div class="back"><a href="/">← Back to site</a></div>
+</div>
+<script>
+async function doLogin(){
+  const pwd = document.getElementById('pwd').value;
+  if(!pwd) return;
+  const r = await fetch('/api/admin_login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
+  const data = await r.json();
+  if(data.ok){window.location.href='/admin';}
+  else{document.getElementById('err').style.display='block';}
+}
+</script>
+</body>
+</html>

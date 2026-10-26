@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StakeDX Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#04060f;--surf:rgba(10,14,28,0.92);--rim:rgba(255,255,255,0.07);--rim2:rgba(255,255,255,0.12);--pur:#7c3aed;--pur2:#9333ea;--pur3:#a855f7;--lime:#00e5a0;--rose:#ef4444;--gold:#f59e0b;--sky:#06b6d4;--tx:#f0f0ff;--tx2:rgba(240,240,255,0.55);--tx3:rgba(240,240,255,0.28);--H:'Syne',sans-serif;--M:'DM Mono',monospace;--B:'DM Sans',sans-serif;--sw:240px}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--B);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.3);border-radius:2px}
+.toast-c{position:fixed;top:18px;right:18px;z-index:1100;pointer-events:none}
+.toast{background:rgba(10,14,28,0.98);border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:12px 16px;font-size:12.5px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,0.5);opacity:0;transform:translateX(16px);transition:all .28s;min-width:240px}
+.toast.on{opacity:1;transform:translateX(0)}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sw);background:rgba(5,8,15,0.98);border-right:1px solid var(--rim);display:flex;flex-direction:column;z-index:100;backdrop-filter:blur(20px)}
+.sb-logo{padding:20px;border-bottom:1px solid var(--rim);display:flex;align-items:center;gap:10px}
+.sb-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--pur),var(--pur2));display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:15px;font-weight:800;color:#fff;box-shadow:0 0 20px rgba(124,58,237,0.4)}
+.sb-name{font-family:var(--H);font-size:16px;font-weight:800}.sb-name em{color:var(--pur3);font-style:normal}
+.sb-nav{flex:1;padding:14px 10px;overflow-y:auto}
+.sb-sec{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--tx3);padding:10px 8px 4px;font-family:var(--M)}
+.sbn{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--tx2);transition:all .15s;margin-bottom:1px;border:1px solid transparent}
+.sbn:hover{background:rgba(255,255,255,0.06);color:var(--tx)}
+.sbn.on{background:rgba(124,58,237,0.12);color:var(--pur3);border-color:rgba(124,58,237,0.18)}
+.sbn-l{display:flex;align-items:center;gap:10px}
+.sbn-badge{background:var(--rose);color:#fff;font-size:8px;font-weight:700;border-radius:99px;padding:1px 6px;font-family:var(--M)}
+.sb-bottom{padding:12px;border-top:1px solid var(--rim)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.15);border-radius:10px;margin-bottom:9px}
+.sb-av{width:32px;height:32px;border-radius:99px;background:linear-gradient(135deg,var(--rose),var(--pur));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:var(--H);color:#fff}
+.sb-un{font-size:12px;font-weight:700}.sb-ur{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{height:60px;background:rgba(4,6,15,0.9);border-bottom:1px solid var(--rim);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50;backdrop-filter:blur(20px)}
+.tb-title{font-family:var(--H);font-size:17px;font-weight:700;letter-spacing:-.3px}
+.tb-r{display:flex;align-items:center;gap:10px}
+.content{padding:24px}
+.page{display:none}.page.on{display:block}
+.s4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin-bottom:20px}
+.sc{background:var(--surf);border:1px solid var(--rim);border-radius:16px;padding:18px;backdrop-filter:blur(20px);transition:all .24s}
+.sc:hover{border-color:rgba(124,58,237,0.2);transform:translateY(-2px)}
+.sc-ic{font-size:20px;margin-bottom:10px}
+.sc-lb{font-size:9.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);font-family:var(--M);margin-bottom:5px}
+.sc-val{font-family:var(--M);font-size:20px;font-weight:500;color:var(--pur3);line-height:1}
+.sc-sub{font-size:11px;color:var(--tx2);margin-top:4px}
+.glass{background:var(--surf);border:1px solid var(--rim);border-radius:16px;padding:20px;backdrop-filter:blur(20px)}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sh-t{font-family:var(--H);font-size:16px;font-weight:700}
+.tw{overflow-x:auto;border-radius:10px}
+table{width:100%;border-collapse:collapse}
+thead{background:rgba(255,255,255,0.02)}
+th{text-align:left;padding:10px 13px;font-size:9.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);font-weight:500;border-bottom:1px solid var(--rim);white-space:nowrap;font-family:var(--M)}
+td{padding:12px 13px;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,0.025);color:var(--tx2);transition:background .15s}
+tr:hover td{background:rgba(124,58,237,0.02);color:var(--tx)}
+.mono{font-family:var(--M);font-size:11px}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:6px;font-size:9.5px;font-weight:600;font-family:var(--M)}
+.bdg::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.bg{background:rgba(0,229,160,.1);color:var(--lime)}.bg::before{background:var(--lime)}
+.br{background:rgba(239,68,68,.1);color:var(--rose)}.br::before{background:var(--rose)}
+.by{background:rgba(245,158,11,.1);color:var(--gold)}.by::before{background:var(--gold)}
+.bb{background:rgba(6,182,212,.1);color:var(--sky)}.bb::before{background:var(--sky)}
+.bp{background:rgba(124,58,237,.1);color:var(--pur3)}.bp::before{background:var(--pur3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 15px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:var(--B);touch-action:manipulation}
+.b-lime{background:linear-gradient(135deg,#059669,var(--lime));color:#fff}.b-lime:hover{transform:scale(1.03)}
+.b-pur{background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff}
+.b-danger{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:var(--rose)}.b-danger:hover{background:rgba(239,68,68,.2)}
+.b-out{background:transparent;border:1px solid rgba(124,58,237,.35);color:var(--pur3)}.b-out:hover{background:rgba(124,58,237,.1)}
+.b-ghost{background:rgba(255,255,255,.05);border:1px solid var(--rim);color:var(--tx2)}.b-ghost:hover{background:var(--rim2);color:var(--tx)}
+.fg{margin-bottom:13px}.fl{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);margin-bottom:5px;font-family:var(--M)}
+.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--rim2);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--tx);font-family:var(--B);outline:none;transition:all .2s}
+.fi:focus{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.fi::placeholder{color:var(--tx3)}.fi-m{font-family:var(--M);font-size:12px}
+.mw{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:20px}
+.mw.on{display:flex}
+.mbox{background:rgba(5,8,18,.99);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:26px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.7)}
+.m-title{font-family:var(--H);font-size:19px;font-weight:800;margin-bottom:4px}
+.m-close{float:right;cursor:pointer;color:var(--tx3);font-size:17px}.m-close:hover{color:var(--tx)}
+.dv{height:1px;background:var(--rim);margin:13px 0}
+.calc-preview{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.cp-cell{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.1);border-radius:9px;padding:10px;text-align:center}
+.cp-l{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.cp-v{font-family:var(--M);font-size:13px;font-weight:500;color:var(--pur3)}
+.plan-card{background:var(--surf);border:1px solid var(--rim);border-radius:14px;padding:18px;transition:all .2s}
+.plan-card:hover{border-color:rgba(124,58,237,.2)}
+.plan-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.plan-emoji{font-size:28px}
+.plan-nm{font-family:var(--H);font-size:15px;font-weight:700}
+.plan-rate{font-family:var(--H);font-size:20px;font-weight:800;color:var(--pur3)}
+.plan-rows{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.plan-cell{background:rgba(255,255,255,.04);border-radius:9px;padding:9px}
+.plan-cl{font-size:9px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.plan-cv{font-size:13px;font-weight:700;font-family:var(--H)}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.set-card{background:var(--surf);border:1px solid var(--rim);border-radius:14px;padding:20px;margin-bottom:14px}
+.set-card-t{font-family:var(--H);font-size:15px;font-weight:700;margin-bottom:4px}
+.set-card-s{font-size:11.5px;color:var(--tx2);margin-bottom:16px}
+@media(max-width:900px){:root{--sw:64px}.sb-name,.sb-sec,.sbn-l span:not(.sbn-ic),.sb-un,.sb-ur{display:none}.sbn{padding:10px;justify-content:center}.sbn-l{justify-content:center}.sb-user{justify-content:center;padding:10px}.sb-bottom{padding:8px}.main{margin-left:64px}}
+</style>
+</head>
+<body>
+<div class="toast-c"><div class="toast" id="toast"></div></div>
+
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-mark">S</div>
+    <span class="sb-name">Stake<em>DX</em></span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Analytics</div>
+    <div class="sbn on" id="sbn-dash" onclick="goto('dash')"><div class="sbn-l"><span>◈</span><span>Dashboard</span></div></div>
+    <div class="sb-sec">Management</div>
+    <div class="sbn" id="sbn-users" onclick="goto('users')"><div class="sbn-l"><span>👥</span><span>Users</span></div></div>
+    <div class="sbn" id="sbn-balance" onclick="goto('balance')"><div class="sbn-l"><span>💰</span><span>Balances</span></div></div>
+    <div class="sbn" id="sbn-plans" onclick="goto('plans')"><div class="sbn-l"><span>⬡</span><span>Plans</span></div></div>
+    <div class="sb-sec">Finance</div>
+    <div class="sbn" id="sbn-deposits" onclick="goto('deposits')"><div class="sbn-l"><span>💳</span><span>Deposits</span></div><span class="sbn-badge" id="depBadge" style="display:none">0</span></div>
+    <div class="sbn" id="sbn-txns" onclick="goto('txns')"><div class="sbn-l"><span>📋</span><span>All Transactions</span></div></div>
+    <div class="sbn" id="sbn-wdraw" onclick="goto('wdraw')"><div class="sbn-l"><span>📤</span><span>Withdrawals</span></div><span class="sbn-badge" id="wdBadge" style="display:none">0</span></div>
+    <div class="sbn" id="sbn-stakes" onclick="goto('stakes')"><div class="sbn-l"><span>⚡</span><span>Active Stakes</span></div></div>
+    <div class="sb-sec">Settings</div>
+    <div class="sbn" id="sbn-settings" onclick="goto('settings')"><div class="sbn-l"><span>⚙️</span><span>App Settings</span></div></div>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-av">A</div>
+      <div><div class="sb-un">Admin</div><div class="sb-ur">Super Admin</div></div>
+    </div>
+    <button class="btn b-danger" style="width:100%;border-radius:10px" onclick="doLogout()">⏻ Sign Out</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="tb-title" id="tbTitle">Dashboard</div>
+    <div class="tb-r">
+      <span style="font-size:10px;color:var(--lime);font-family:var(--M);background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.15);padding:4px 10px;border-radius:99px">🟢 LIVE</span>
+      <a href="/" class="btn b-out" style="text-decoration:none;font-size:11px">← Main Site</a>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="p-dash" class="page on">
+      <div class="s4" id="dashStats"></div>
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:16px">
+        <div class="glass"><div class="sh"><span class="sh-t">Recent Transactions</span></div><div class="tw" id="dashTxTable"></div></div>
+        <div class="glass"><div class="sh-t" style="margin-bottom:14px">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn b-out" style="width:100%;border-radius:10px" onclick="goto('deposits')">💳 Pending Deposits</button>
+            <button class="btn b-out" style="width:100%;border-radius:10px" onclick="goto('wdraw')">📤 Pending Withdrawals</button>
+            <button class="btn b-out" style="width:100%;border-radius:10px" onclick="goto('users')">👥 Manage Users</button>
+            <button class="btn b-out" style="width:100%;border-radius:10px" onclick="goto('settings')">⚙️ App Settings</button>
+            <button class="btn b-out" style="width:100%;border-radius:10px" onclick="runProfits()">⚡ Run Daily Profits</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="p-users" class="page">
+      <div class="glass"><div class="sh"><span class="sh-t">User Management</span><span id="uCnt" style="font-family:var(--M);font-size:10px;color:var(--tx3)"></span></div><div class="tw" id="usersTable"></div></div>
+    </div>
+
+    <!-- PLANS -->
+    <div id="p-plans" class="page">
+      <div style="margin-bottom:16px;font-size:13px;color:var(--tx2)">Click <strong style="color:var(--pur3)">Edit</strong> to modify daily return and lock period. Changes apply instantly.</div>
+      <div class="plans-grid" id="plansGrid"></div>
+    </div>
+
+    <!-- BALANCE MANAGEMENT -->
+    <div id="p-balance" class="page">
+      <div class="glass"><div class="sh"><span class="sh-t">Manage User Balances</span></div><div class="tw" id="balTable"></div></div>
+    </div>
+
+    <!-- PENDING DEPOSITS -->
+    <div id="p-deposits" class="page">
+      <div class="glass">
+        <div class="sh"><span class="sh-t">Pending Deposits</span><span class="bdg by" id="depBadge2" style="display:none">0 pending</span></div>
+        <div class="tw" id="depositsTable"></div>
+      </div>
+    </div>
+
+    <!-- ALL TRANSACTIONS -->
+    <div id="p-txns" class="page">
+      <div class="glass"><div class="sh"><span class="sh-t">All Transactions</span></div><div class="tw" id="txnsTable"></div></div>
+    </div>
+
+    <!-- STAKES -->
+    <div id="p-stakes" class="page">
+      <div class="glass"><div class="sh"><span class="sh-t">All Stakes / Investments</span></div><div class="tw" id="stakesTable"></div></div>
+    </div>
+
+    <!-- WITHDRAWALS -->
+    <div id="p-wdraw" class="page">
+      <div class="glass">
+        <div class="sh"><span class="sh-t">Pending Withdrawals</span><span class="bdg br" id="wdBadge2" style="display:none">0 pending</span></div>
+        <div class="tw" id="wdrawTable"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="p-settings" class="page">
+      <!-- Wallet Addresses -->
+      <div class="set-card">
+        <div class="set-card-t">💳 Deposit Wallet Addresses</div>
+        <div class="set-card-s">Update deposit addresses. Users will see these when depositing.</div>
+        <div class="fg"><label class="fl">TRC20 Address (Tron · $1 withdrawal fee)</label><input class="fi fi-m" id="sTrc20" placeholder="TRC20 USDT address"/></div>
+        <div class="fg"><label class="fl">BEP20 Address (BNB Chain · Free withdrawal)</label><input class="fi fi-m" id="sBep20" placeholder="BEP20 USDT address"/></div>
+        <button class="btn b-lime" onclick="saveWallets()">💾 Save Wallet Addresses</button>
+      </div>
+
+      <!-- QR Codes -->
+      <div class="set-card">
+        <div class="set-card-t">📷 Deposit QR Codes</div>
+        <div class="set-card-s">Upload QR code images for TRC20 and BEP20. Users will see these when depositing.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <!-- TRC20 QR -->
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--tx3);font-family:var(--M);margin-bottom:8px">🌐 TRC20 QR Code</div>
+            <div id="qrPreviewTRC20" style="background:#fff;border-radius:12px;padding:8px;width:110px;height:110px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+              <span style="font-size:32px;opacity:.3">📷</span>
+            </div>
+            <label style="cursor:pointer">
+              <input type="file" id="qrFileTRC20" accept="image/*" style="display:none" onchange="previewQR('TRC20')"/>
+              <span class="btn b-ghost b-sm" style="border-radius:8px;font-size:11px" onclick="document.getElementById('qrFileTRC20').click()">📁 Choose Image</span>
+            </label>
+            <br/><button class="btn b-lime b-sm" style="border-radius:8px;font-size:11px;margin-top:8px" onclick="uploadQR('TRC20')">⬆ Upload TRC20 QR</button>
+          </div>
+          <!-- BEP20 QR -->
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--tx3);font-family:var(--M);margin-bottom:8px">🔶 BEP20 QR Code</div>
+            <div id="qrPreviewBEP20" style="background:#fff;border-radius:12px;padding:8px;width:110px;height:110px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+              <span style="font-size:32px;opacity:.3">📷</span>
+            </div>
+            <label style="cursor:pointer">
+              <input type="file" id="qrFileBEP20" accept="image/*" style="display:none" onchange="previewQR('BEP20')"/>
+              <span class="btn b-ghost b-sm" style="border-radius:8px;font-size:11px" onclick="document.getElementById('qrFileBEP20').click()">📁 Choose Image</span>
+            </label>
+            <br/><button class="btn b-lime b-sm" style="border-radius:8px;font-size:11px;margin-top:8px" onclick="uploadQR('BEP20')">⬆ Upload BEP20 QR</button>
+          </div>
+        </div>
+      </div>
+      <!-- Contact / Telegram -->
+      <div class="set-card">
+        <div class="set-card-t">💬 Contact / Support Settings</div>
+        <div class="set-card-s">Set Telegram group/channel link shown to users on Contact Us button.</div>
+        <div class="fg"><label class="fl">Telegram Link</label><input class="fi" id="sTgLink" placeholder="https://t.me/your_channel"/></div>
+        <div class="fg"><label class="fl">Contact Button Text</label><input class="fi" id="sTgText" placeholder="Contact Support"/></div>
+        <button class="btn b-pur" onclick="saveSettings()">💾 Save Contact Settings</button>
+      </div>
+      <!-- Network Fees Info -->
+      <div class="set-card">
+        <div class="set-card-t">⚙️ Network Fee Config</div>
+        <div class="set-card-s">Current fee config (hardcoded, change in app.py NETWORK_FEES):</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:14px">
+            <div style="font-size:10px;color:var(--tx3);font-family:var(--M);margin-bottom:4px">BEP20 WITHDRAWAL FEE</div>
+            <div style="font-family:var(--H);font-size:22px;font-weight:800;color:var(--lime)">$0</div>
+            <div style="font-size:11px;color:var(--tx2);margin-top:2px">Free</div>
+          </div>
+          <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:14px">
+            <div style="font-size:10px;color:var(--tx3);font-family:var(--M);margin-bottom:4px">TRC20 WITHDRAWAL FEE</div>
+            <div style="font-family:var(--H);font-size:22px;font-weight:800;color:var(--gold)">$1</div>
+            <div style="font-size:11px;color:var(--tx2);margin-top:2px">Deducted from balance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- EDIT PLAN MODAL -->
+<div class="mw" id="mEdit">
+  <div class="mbox">
+    <div style="float:right"><span class="m-close" onclick="closeEdit()">✕</span></div>
+    <div class="m-title" style="margin-bottom:4px">Edit Plan</div>
+    <p style="font-size:12px;color:var(--tx2);margin-bottom:18px">Changes apply to all new investments immediately.</p>
+    <input type="hidden" id="epId"/>
+    <input type="hidden" id="epAmt"/>
+    <div class="fg"><label class="fl">Plan Label</label><input class="fi" id="epLbl"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="fg"><label class="fl">Daily Return (%)</label><input class="fi fi-m" type="number" step="0.1" id="epD" oninput="prevPlan()"/></div>
+      <div class="fg"><label class="fl">Lock Period (Days)</label><input class="fi fi-m" type="number" id="epP" oninput="prevPlan()"/></div>
+    </div>
+    <div style="background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.1);border-radius:10px;padding:14px;margin-bottom:14px">
+      <div style="font-size:9.5px;color:var(--tx3);font-family:var(--M);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Preview</div>
+      <div class="calc-preview" id="epPrev"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn b-ghost" style="flex:1;border-radius:10px" onclick="closeEdit()">Cancel</button>
+      <button class="btn b-lime" style="flex:1;border-radius:10px;height:42px" onclick="savePlan()">Save Changes ✓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let _tt;
+function toast(msg,type='success'){const ic={success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};const el=document.getElementById('toast');el.innerHTML=`<span>${ic[type]||'✅'}</span><span>${msg}</span>`;el.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('on'),3500);}
+const _apiCache={};const _apiCacheTs={};const _CACHE_TTL=8000;
+async function api(path,data){
+  const opts={method:data?'POST':'GET',headers:{'Content-Type':'application/json'}};
+  if(data)opts.body=JSON.stringify(data);
+  // Only cache GET requests
+  if(!data){
+    const now=Date.now();
+    if(_apiCache[path]&&(now-(_apiCacheTs[path]||0))<_CACHE_TTL)return _apiCache[path];
+    const r=await fetch(path,opts);
+    const j=await r.json();
+    _apiCache[path]=j;_apiCacheTs[path]=now;
+    return j;
+  }
+  // POST: invalidate related cache
+  const r=await fetch(path,opts);
+  const j=await r.json();
+  if(j.ok){
+    // Clear transaction & stats cache on mutations
+    delete _apiCache['/api/admin/transactions'];
+    delete _apiCache['/api/admin/stats'];
+    delete _apiCache['/api/admin/users'];
+    delete _apiCache['/api/admin/stakes'];
+  }
+  return j;
+}
+
+const PAGES={dash:'Dashboard',users:'User Management',balance:'Balance Management',plans:'Staking Plans',deposits:'Pending Deposits',txns:'All Transactions',wdraw:'Pending Withdrawals',stakes:'Active Stakes',settings:'App Settings'};
+function goto(id){document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));document.querySelectorAll('.sbn').forEach(el=>el.classList.remove('on'));document.getElementById('p-'+id).classList.add('on');document.getElementById('sbn-'+id).classList.add('on');document.getElementById('tbTitle').textContent=PAGES[id];loadPage(id);}
+async function loadPage(id){
+  if(id==='dash')await loadDash();
+  else if(id==='users')await loadUsers();
+  else if(id==='balance')await loadBalance();
+  else if(id==='plans')await loadPlans();
+  else if(id==='deposits')await loadDeposits();
+  else if(id==='txns')await loadTxns();
+  else if(id==='wdraw')await loadWdraw();
+  else if(id==='stakes')await loadStakes();
+  else if(id==='settings')await loadSettings();
+}
+
+async function loadDash(){
+  document.getElementById('dashStats').innerHTML='<div style="color:var(--tx3);font-family:var(--M);font-size:12px;padding:12px">Loading stats...</div>';
+  const r=await api('/api/admin/stats');if(!r.ok)return;
+  document.getElementById('dashStats').innerHTML=[
+    {ic:'👥',lb:'Total Users',vl:r.total_users,sb:`${r.active_users} active`},
+    {ic:'💰',lb:'Total Deposited',vl:'$'+r.total_deposited.toLocaleString('en',{maximumFractionDigits:2}),sb:'Completed'},
+    {ic:'💳',lb:'Pending Deposits',vl:r.pending_deposits||0,sb:'Need approval'},
+    {ic:'📤',lb:'Pending W/draw',vl:r.pending_withdrawals,sb:'Need approval'},
+    {ic:'📈',lb:'AUM',vl:'$'+r.aum.toLocaleString('en',{maximumFractionDigits:2}),sb:'Under management'},
+    {ic:'💹',lb:'Total Profits',vl:'$'+(r.total_profit||0).toFixed(2),sb:'Paid to users'},
+  ].map(s=>`<div class="sc"><div class="sc-ic">${s.ic}</div><div class="sc-lb">${s.lb}</div><div class="sc-val">${s.vl}</div><div class="sc-sub">${s.sb}</div></div>`).join('');
+  // Update badges
+  const pb=r.pending_deposits||0;const wb=r.pending_withdrawals||0;
+  ['depBadge'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=pb;el.style.display=pb?'':'none';}});
+  ['wdBadge'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=wb;el.style.display=wb?'':'none';}});
+  const txr=await api('/api/admin/transactions');if(!txr.ok)return;
+  const txs=txr.transactions.slice(0,5);
+  document.getElementById('dashTxTable').innerHTML=`<table><thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Network</th><th>Status</th><th>Action</th></tr></thead><tbody>${txs.map(tx=>`<tr><td style="font-size:11px">${tx.user_email?.split('@')[0]||'—'}</td><td><span class="bdg bb">${tx.type}</span></td><td class="mono">$${tx.amount}</td><td class="mono" style="font-size:10px">${tx.network||'—'}</td><td><span class="bdg ${tx.status==='completed'?'bg':tx.status==='pending'?'by':'br'}">${tx.status}</span></td><td>${tx.status==='pending'?`<div style="display:flex;gap:4px"><button class="btn b-lime" style="padding:4px 8px;font-size:11px" onclick="approveTx('${tx.id}')">✓</button><button class="btn b-danger" style="padding:4px 8px;font-size:11px" onclick="rejectTx('${tx.id}')">✕</button></div>`:'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+
+async function loadDeposits(){
+  const r=await api('/api/admin/transactions');if(!r.ok)return;
+  const pend=r.transactions.filter(t=>t.type==='deposit'&&t.status==='pending');
+  const b1=document.getElementById('depBadge');const b2=document.getElementById('depBadge2');
+  if(b1){b1.textContent=pend.length;b1.style.display=pend.length?'':'none';}
+  if(b2){b2.textContent=pend.length+' pending';b2.style.display=pend.length?'inline-flex':'none';}
+  document.getElementById('depositsTable').innerHTML=pend.length?
+    `<table><thead><tr><th>User</th><th>Amount</th><th>Network</th><th>TX Hash / ID</th><th>Date</th><th>Action</th></tr></thead><tbody>${pend.map(tx=>`<tr>
+      <td style="font-size:11px">${tx.user_email}</td>
+      <td class="mono" style="color:var(--lime);font-weight:700">$${tx.amount}</td>
+      <td><span class="bdg bb">${tx.network||'—'}</span></td>
+      <td class="mono" style="font-size:9.5px;max-width:200px;word-break:break-all">${tx.tx_hash||'—'}</td>
+      <td style="font-family:var(--M);font-size:9.5px">${tx.date||'—'}</td>
+      <td><div style="display:flex;gap:6px"><button class="btn b-lime" onclick="approveTx('${tx.id}')">✓ Approve</button><button class="btn b-danger" onclick="rejectTx('${tx.id}')">✕ Reject</button></div></td>
+    </tr>`).join('')}</tbody></table>`:
+    '<div style="text-align:center;padding:36px 0;color:var(--tx3)">✅ No pending deposits</div>';
+}
+
+async function loadBalance(){
+  const r=await api('/api/admin/users');if(!r.ok)return;
+  document.getElementById('balTable').innerHTML=`<table><thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Invested</th><th>Profit</th><th>Credit / Debit</th></tr></thead><tbody>${r.users.map(u=>`<tr><td><strong>${u.name}</strong></td><td class="mono" style="font-size:10px">${u.email}</td><td class="mono" style="color:var(--lime)">$${(u.balance||0).toFixed(2)}</td><td class="mono">$${(u.invested||0).toFixed(2)}</td><td class="mono" style="color:var(--gold)">$${(u.profit||0).toFixed(2)}</td><td><div style="display:flex;gap:6px;align-items:center"><input type="number" id="ba_${u.email.replace(/[@.]/g,'_')}" placeholder="Amount" style="width:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:5px 8px;font-size:12px;color:var(--tx);font-family:var(--M)"/><button class="btn b-lime" style="padding:5px 10px;font-size:11px" onclick="creditUser('${u.email}')">+ Add</button><button class="btn b-danger" style="padding:5px 10px;font-size:11px" onclick="debitUser('${u.email}')">- Deduct</button></div></td></tr>`).join('')}</tbody></table>`;
+}
+async function creditUser(email){const inp=document.getElementById('ba_'+email.replace(/[@.]/g,'_'));const amt=parseFloat(inp.value);if(!amt||amt<=0){toast('Enter valid amount','error');return;}const r=await api('/api/admin/update_balance',{email,amount:amt});if(r.ok){toast(`+$${amt} credited to ${email.split('@')[0]}`,'success');inp.value='';loadBalance();}else toast('Error','error');}
+async function debitUser(email){const inp=document.getElementById('ba_'+email.replace(/[@.]/g,'_'));const amt=parseFloat(inp.value);if(!amt||amt<=0){toast('Enter valid amount','error');return;}const r=await api('/api/admin/update_balance',{email,amount:-amt});if(r.ok){toast(`-$${amt} deducted from ${email.split('@')[0]}`,'info');inp.value='';loadBalance();}else toast('Error','error');}
+
+async function loadUsers(){
+  const r=await api('/api/admin/users');if(!r.ok)return;
+  document.getElementById('uCnt').textContent=r.users.length+' total';
+  document.getElementById('usersTable').innerHTML=`<table><thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Invested</th><th>Referred By</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead><tbody>${r.users.map(u=>`<tr><td><strong>${u.name}</strong></td><td class="mono" style="font-size:10px">${u.email}</td><td class="mono">$${(u.balance||0).toFixed(2)}</td><td class="mono">$${(u.invested||0).toFixed(2)}</td><td class="mono" style="font-size:9.5px;color:var(--pur3)">${u.referred_by?u.referred_by.split('@')[0]:'—'}</td><td><span class="bdg ${u.status==='active'?'bg':'br'}">${u.status}</span></td><td style="font-family:var(--M);font-size:10px">${u.joined||'—'}</td><td><button class="btn ${u.status==='active'?'b-danger':'b-out'}" onclick="toggleUser('${u.email}')">${u.status==='active'?'Suspend':'Activate'}</button></td></tr>`).join('')}</tbody></table>`;
+}
+async function toggleUser(email){const r=await api('/api/admin/toggle_user',{email});if(r.ok){toast('User status updated.','success');loadUsers();}else toast('Error','error');}
+
+async function loadPlans(){
+  const r=await api('/api/plans');if(!r.ok)return;
+  document.getElementById('plansGrid').innerHTML=r.plans.map(p=>`<div class="plan-card"><div class="plan-h"><div><div class="plan-emoji">${p.emoji||'⬡'}</div><div class="plan-nm">${p.label} Plan</div></div><div class="plan-rate">${p.daily}%<div style="font-size:10px;font-family:var(--M);color:var(--tx3)">daily</div></div></div><div class="plan-rows"><div class="plan-cell"><div class="plan-cl">Lock Period</div><div class="plan-cv">${p.period} days</div></div><div class="plan-cell"><div class="plan-cl">Min Invest</div><div class="plan-cv">$${p.min||100}</div></div><div class="plan-cell"><div class="plan-cl">Daily Earn</div><div class="plan-cv" style="color:var(--lime)">$${((p.min||100)*p.daily/100).toFixed(2)}</div></div><div class="plan-cell"><div class="plan-cl">Total Profit</div><div class="plan-cv" style="color:var(--gold)">+${(p.daily*p.period).toFixed(0)}%</div></div></div><button class="btn b-out" style="width:100%;border-radius:10px" onclick='openEdit(${JSON.stringify(p)})'>✏️ Edit Plan</button></div>`).join('');
+}
+function openEdit(p){document.getElementById('epId').value=p.id;document.getElementById('epAmt').value=p.min||100;document.getElementById('epLbl').value=p.label;document.getElementById('epD').value=p.daily;document.getElementById('epP').value=p.period;prevPlan();document.getElementById('mEdit').classList.add('on');}
+function closeEdit(){document.getElementById('mEdit').classList.remove('on');}
+function prevPlan(){const amt=parseFloat(document.getElementById('epAmt').value)||100;const d=parseFloat(document.getElementById('epD').value)||0;const per=parseInt(document.getElementById('epP').value)||0;document.getElementById('epPrev').innerHTML=[{l:'Daily Earn',v:'$'+(amt*d/100).toFixed(2)},{l:'Total Profit',v:'+$'+(amt*d/100*per).toFixed(2)},{l:'Total Return',v:'$'+(amt+amt*d/100*per).toFixed(2)}].map(r=>`<div class="cp-cell"><div class="cp-l">${r.l}</div><div class="cp-v">${r.v}</div></div>`).join('');}
+async function savePlan(){const r=await api('/api/admin/update_plan',{id:parseInt(document.getElementById('epId').value),label:document.getElementById('epLbl').value,daily:parseFloat(document.getElementById('epD').value),period:parseInt(document.getElementById('epP').value)});if(r.ok){toast('Plan updated!','success');closeEdit();loadPlans();}else toast('Error','error');}
+
+async function loadTxns(){
+  const r=await api('/api/admin/transactions');if(!r.ok)return;
+  document.getElementById('txnsTable').innerHTML=`<table><thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Network</th><th>TX Hash</th><th>Status</th><th>Action</th></tr></thead><tbody>${r.transactions.map(tx=>`<tr>
+    <td style="font-size:11px">${tx.user_email?.split('@')[0]||'—'}</td>
+    <td><span class="bdg bb">${tx.type}</span></td>
+    <td class="mono">$${tx.amount}</td>
+    <td style="font-family:var(--M);font-size:10px">${tx.network||'—'}</td>
+    <td class="mono" style="font-size:9px;max-width:120px;overflow:hidden;text-overflow:ellipsis" title="${tx.tx_hash||''}">${tx.tx_hash?tx.tx_hash.slice(0,16)+'…':'—'}</td>
+    <td><span class="bdg ${tx.status==='completed'?'bg':tx.status==='pending'?'by':'br'}">${tx.status}</span></td>
+    <td>${tx.status==='pending'?`<div style="display:flex;gap:4px"><button class="btn b-lime" style="padding:4px 8px;font-size:11px" onclick="approveTx('${tx.id}')">✓</button><button class="btn b-danger" style="padding:4px 8px;font-size:11px" onclick="rejectTx('${tx.id}')">✕</button></div>`:'—'}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+async function loadWdraw(){
+  const r=await api('/api/admin/transactions');if(!r.ok)return;
+  const pend=r.transactions.filter(t=>t.type==='withdrawal'&&t.status==='pending');
+  const b1=document.getElementById('wdBadge');const b2=document.getElementById('wdBadge2');
+  if(b1){b1.textContent=pend.length;b1.style.display=pend.length?'':'none';}
+  if(b2){b2.textContent=pend.length+' pending';b2.style.display=pend.length?'inline-flex':'none';}
+  document.getElementById('wdrawTable').innerHTML=pend.length?
+    `<table><thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Fee</th><th>Address</th><th>Date</th><th>Action</th></tr></thead><tbody>${pend.map(tx=>`<tr>
+      <td style="font-size:11px">${tx.user_email}</td>
+      <td class="mono" style="color:var(--gold);font-weight:700">$${tx.amount}</td>
+      <td><span class="bdg bb">${tx.network||'—'}</span></td>
+      <td class="mono" style="color:var(--rose)">${tx.ref||'$0'}</td>
+      <td class="mono" style="font-size:9.5px;max-width:150px;overflow:hidden;text-overflow:ellipsis">${tx.address||'—'}</td>
+      <td style="font-family:var(--M);font-size:9.5px">${tx.date||'—'}</td>
+      <td><div style="display:flex;gap:7px"><button class="btn b-lime" onclick="approveTx('${tx.id}')">✓ Send</button><button class="btn b-danger" onclick="rejectTx('${tx.id}')">✕ Reject</button></div></td>
+    </tr>`).join('')}</tbody></table>`:
+    '<div style="text-align:center;padding:36px 0;color:var(--tx3)">✅ No pending withdrawals</div>';
+}
+
+const _pendingActions=new Set();
+async function approveTx(id){if(_pendingActions.has(id))return;_pendingActions.add(id);const r=await api('/api/admin/approve_tx',{tx_id:id});_pendingActions.delete(id);if(r.ok){toast('Approved! ✅','success');loadDeposits();loadWdraw();loadDash();}else toast(r.msg||'Error','error');}
+async function rejectTx(id){if(_pendingActions.has(id))return;_pendingActions.add(id);const r=await api('/api/admin/reject_tx',{tx_id:id});_pendingActions.delete(id);if(r.ok){toast('Rejected.','info');loadDeposits();loadWdraw();loadDash();}else toast('Error','error');}
+
+async function runProfits(){if(!confirm('Run daily profit crediting for all active stakes?'))return;const r=await api('/api/admin/run_profits',{});if(r.ok){toast('Daily profits processed! ✅','success');loadDash();}else toast('Error','error');}
+
+async function loadStakes(){
+  const r=await api('/api/admin/stakes');if(!r.ok)return;
+  const active=r.stakes.filter(s=>s.status==='active');
+  const total_aum=r.stakes.filter(s=>s.status==='active').reduce((a,s)=>a+(parseFloat(s.amount)||0),0);
+  document.getElementById('stakesTable').innerHTML=`<div style="margin-bottom:12px;font-size:12px;color:var(--tx2)">Total: <strong style="color:var(--pur3)">${r.stakes.length}</strong> · Active: <strong style="color:var(--lime)">${active.length}</strong> · AUM: <strong style="color:var(--gold)">$${total_aum.toFixed(2)}</strong></div><table><thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Daily Earn</th><th>Earned</th><th>Days Left</th><th>Status</th></tr></thead><tbody>${r.stakes.map(s=>`<tr><td style="font-size:11px">${s.user_email?.split('@')[0]||'—'}</td><td><span style="font-size:14px">${s.emoji||'⬡'}</span> ${s.plan}</td><td class="mono">$${parseFloat(s.amount||0).toFixed(2)}</td><td class="mono" style="color:var(--lime)">$${parseFloat(s.daily_earn||0).toFixed(2)}</td><td class="mono" style="color:var(--gold)">$${parseFloat(s.earned||0).toFixed(4)}</td><td class="mono">${s.days_left||0}d</td><td><span class="bdg ${s.status==='active'?'bg':s.status==='completed'?'bb':'br'}">${s.status}</span></td></tr>`).join('')}</tbody></table>`;
+}
+
+async function loadSettings(){
+  const wr=await api('/api/wallets');
+  if(wr.ok){
+    document.getElementById('sTrc20').value=wr.wallets.TRC20||'';
+    document.getElementById('sBep20').value=wr.wallets.BEP20||'';
+  }
+  const sr=await api('/api/settings');
+  if(sr.ok){
+    document.getElementById('sTgLink').value=sr.telegram_link||'';
+    document.getElementById('sTgText').value=sr.contact_text||'';
+  }
+  // Load existing QR codes
+  const qr=await api('/api/qr_codes');
+  if(qr.ok){
+    if(qr.TRC20) setQRPreview('TRC20', qr.TRC20);
+    if(qr.BEP20) setQRPreview('BEP20', qr.BEP20);
+  }
+}
+
+function setQRPreview(net, imgData){
+  const el=document.getElementById('qrPreview'+net);
+  if(el) el.innerHTML=`<img src="${imgData}" style="width:100%;height:100%;object-fit:contain;border-radius:6px"/>`;
+}
+
+function previewQR(net){
+  const file=document.getElementById('qrFile'+net).files[0];
+  if(!file)return;
+  if(file.size>600000){toast('Image too large. Max 500KB.','error');return;}
+  const reader=new FileReader();
+  reader.onload=e=>setQRPreview(net, e.target.result);
+  reader.readAsDataURL(file);
+}
+
+async function uploadQR(net){
+  const file=document.getElementById('qrFile'+net).files[0];
+  if(!file){toast('Please choose an image first','error');return;}
+  if(file.size>600000){toast('Image too large. Max 500KB.','error');return;}
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    const image=e.target.result;
+    const r=await api('/api/admin/upload_qr',{network:net,image});
+    if(r.ok){toast(`${net} QR uploaded! ✅`,'success');}
+    else toast(r.msg||'Upload failed','error');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveWallets(){
+  const trc20=document.getElementById('sTrc20').value.trim();
+  const bep20=document.getElementById('sBep20').value.trim();
+  if(!trc20&&!bep20){toast('Enter at least one address','error');return;}
+  const r=await api('/api/admin/update_wallets',{trc20,bep20});
+  if(r.ok)toast('Wallet addresses saved! ✅','success');
+  else toast('Error saving wallets','error');
+}
+
+async function saveSettings(){
+  const telegram_link=document.getElementById('sTgLink').value.trim();
+  const contact_text=document.getElementById('sTgText').value.trim();
+  const r=await api('/api/admin/update_settings',{telegram_link,contact_text});
+  if(r.ok)toast('Contact settings saved! ✅','success');
+  else toast('Error saving settings','error');
+}
+
+async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/';}
+
+window.onload=async function(){
+  const r=await api('/api/me');
+  if(!r.ok||r.role!=='admin'){window.location.href='/';return;}
+  loadDash();
+};
+</script>
+</body>
+</html>
